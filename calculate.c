@@ -6,9 +6,12 @@
 #include <math.h>
 
 char expression[20] = {"\0"};
-uint8_t expression_end = 0;
-char sign = 0x00;
-char separator[2] = "\0";
+
+// expression_check == 0 => do nothing
+// expression_check == 1 => there is = , clear expression tab, clear LCD
+// expression_check == 1 => there is more than one separator(+,-,*,/), print result on LCD, save result into expression tab
+uint8_t expression_check = 0;
+
 uint8_t separator_counter = 0;
 
 char ReadButton(char option)
@@ -24,18 +27,18 @@ char ReadButton(char option)
     char button_print[2] = {"\0"};
     if (button != 0)
     {
-        if (expression_end == 1)
+        if (expression_check == 1)
         {
             counter = 0;
             memset(expression, 0, 20 * sizeof(char));
             LCD1602_ClearAll();
-            expression_end = 0;
+            expression_check = 0;
         }
 
-        if (expression_end == 2)
+        if (expression_check == 2)
         {
             counter = strlen(expression);
-            expression_end = 0;
+            expression_check = 0;
         }
 
         if (button != 'C')
@@ -61,15 +64,15 @@ char ReadButton(char option)
 
 void Calc(char *str, char *separator, bool sign_equal)
 {
-    expression_end = 1;
+    expression_check = 1;
     char buffor[20] = {"\0"};
 
     float result;
 
-		char* end;
-		float a = strtod( str, & end );
-		end++;
-		float b = strtod( end, NULL );
+    char *end;
+    float a = strtod(str, &end);
+    end++;
+    float b = strtod(end, NULL);
     if (separator[0] == '+')
         result = a + b;
     else if (separator[0] == '-')
@@ -79,31 +82,31 @@ void Calc(char *str, char *separator, bool sign_equal)
     else if (separator[0] == '/')
         result = a / b;
 
-		if(result-floor(result)!=0)
+    if (result - floor(result) != 0)
         snprintf(buffor, 20, "%.2f", result);
     else
         snprintf(buffor, 20, "%.0f", result);
 
     if (!sign_equal)
     {
-			if(result-floor(result)!=0)
-        snprintf(expression, 20, "%.2f%c\0", result, separator[1]);
-			else
-				snprintf(expression, 20, "%.0f%c\0", result, separator[1]);
-			
+        if (result - floor(result) != 0)
+            snprintf(expression, 20, "%.2f%c\0", result, separator[1]);
+        else
+            snprintf(expression, 20, "%.0f%c\0", result, separator[1]);
+
         LCD1602_ClearAll();
         LCD1602_Print(expression);
 
-        expression_end = 2;
+        expression_check = 2;
     }
     else
         LCD1602_Print(buffor);
 }
 
-
 void loop(void)
 {
-    sign = ReadButton(0);
+		static char separator[2] = "\0";
+		char sign = ReadButton(0);
 
     if (sign == '+' || sign == '-' || sign == '*' || sign == '/')
     {
