@@ -3,6 +3,7 @@
 #include "keyboard.h"
 #include "frdm_bsp.h"
 #include <string.h>
+#include <math.h>
 
 char expression[20] = {"\0"};
 uint8_t expression_end = 0;
@@ -65,12 +66,14 @@ void Calc(char *str, char *separator, bool sign_equal)
 
     float result;
 
-    char *ptr = strtok(str, separator);
-    float a = atoi(ptr);
-
-    ptr = strtok(NULL, '=');
-    float b = atoi(ptr);
-
+   // char *ptr = strtok(str, separator);
+   // float a = atof(ptr);
+		char* end;
+		float a = strtod( str, & end );
+   // ptr = strtok(NULL, '=');
+  //  float b = atof(ptr);
+		end++;
+float b = strtod( end, NULL );
     if (separator[0] == '+')
         result = a + b;
     else if (separator[0] == '-')
@@ -80,17 +83,19 @@ void Calc(char *str, char *separator, bool sign_equal)
     else if (separator[0] == '/')
         result = a / b;
 
-    if (separator[0] == '/')
+  //  if (separator[0] == '/')
+		if(result-floor(result)!=0)
         snprintf(buffor, 20, "%.2f", result);
     else
         snprintf(buffor, 20, "%.0f", result);
 
     if (!sign_equal)
     {
-        snprintf(buffor, 20, "%.0f%c\0", result, separator[1]);
-        memset(expression, 0, 20 * sizeof(char));
-        memcpy(expression, buffor, sizeof(buffor));
-
+			if(result-floor(result)!=0)
+        snprintf(expression, 20, "%.2f%c\0", result, separator[1]);
+			else
+				snprintf(expression, 20, "%.0f%c\0", result, separator[1]);
+			
         LCD1602_ClearAll();
         LCD1602_Print(expression);
 
@@ -99,6 +104,8 @@ void Calc(char *str, char *separator, bool sign_equal)
     else
         LCD1602_Print(buffor);
 }
+
+
 void loop(void)
 {
     sign = ReadButton(0);
