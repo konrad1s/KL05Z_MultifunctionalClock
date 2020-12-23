@@ -5,7 +5,7 @@
 #include <string.h>
 
 char expression[20] = {"\0"};
-bool expression_end = 0;
+uint8_t expression_end = 0;
 char sign = 0x00;
 char separator[2] = "\0";
 uint8_t separator_counter = 0;
@@ -23,7 +23,7 @@ char ReadButton(char option)
     char button_print[2] = {"\0"};
     if (button != 0)
     {
-        if (expression_end)
+        if (expression_end==1)
         {
             counter = 0;
             memset(expression, 0, 20 * sizeof(char));
@@ -31,6 +31,12 @@ char ReadButton(char option)
             expression_end = 0;
         }
 
+				if (expression_end==2)
+        {
+            counter = strlen(expression);
+            expression_end = 0;
+        }
+				
         if (button != 'C')
         {
             expression[counter] = button;
@@ -41,22 +47,29 @@ char ReadButton(char option)
         }
         else
         {
-            expression[--counter] = NULL;
+					if(counter>0)
+					{
+						expression[--counter] = NULL;
             LCD1602_ClearAll();
             LCD1602_Print(expression);
+					}
+
         }
     }
     return 0x00;
 }
 
-void Calc(char *str, char *separator)
+
+void Calc(char *str, char *separator, bool sign_equal)
 {
     expression_end = 1;
-    char sm[20] = {"\0"};
+    char buffor[20] = {"\0"};
+		
     float result;
 
     char *ptr = strtok(str, separator);
     float a = atoi(ptr);
+
     ptr = strtok(NULL, '=');
     float b = atoi(ptr);
 
@@ -70,32 +83,42 @@ void Calc(char *str, char *separator)
         result = a / b;
 
     if (separator[0] == '/')
-        snprintf(sm, 20, "%.2f", result);
+        snprintf(buffor, 20, "%.2f", result);
     else
-        snprintf(sm, 20, "%.0f", result);
+        snprintf(buffor, 20, "%.0f", result);
 
-    LCD1602_Print(sm);
+		if(!sign_equal)
+		{
+			snprintf(buffor, 20, "%.0f%c\0", result,separator[1]);
+			memset(expression, 0, 20 * sizeof(char));
+			memcpy(expression,buffor,sizeof(buffor));
+			
+			LCD1602_ClearAll();
+			LCD1602_Print(expression);
+
+			expression_end = 2;
+		}
+		else
+			LCD1602_Print(buffor);
 }
 void loop(void)
 {
-
     sign = ReadButton(0);
 
     if (sign == '+' || sign == '-' || sign == '*' || sign == '/')
     {
-        separator_counter++;
+       separator_counter++;
         if (separator_counter == 2)
         {
-            ReadButton('C');
-            ReadButton('=');
-            separator_counter = 0;
-            Calc(expression, separator);
+						separator[1]=sign;
+            separator_counter = 1;
+            Calc(expression, separator, 0);
         }
-        *separator = sign;
+       separator[0] = sign;
     }
     else if (sign == '=')
     {
         separator_counter = 0;
-        Calc(expression, separator);
+        Calc(expression, separator, 1);
     }
 }

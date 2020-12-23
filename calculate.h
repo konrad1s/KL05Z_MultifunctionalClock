@@ -8,7 +8,7 @@ typedef enum
 } bool;
 
 char ReadButton(char option);
-void Calc(char *str, char *separator);
+void Calc(char *str, char *separator, bool sign_equal);
 void loop(void);
 
 #endif
