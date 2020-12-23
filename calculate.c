@@ -12,8 +12,6 @@ char expression[20] = {"\0"};
 // expression_check == 1 => there is more than one separator(+,-,*,/), print result on LCD, save result into expression tab
 uint8_t expression_check = 0;
 
-uint8_t separator_counter = 0;
-
 char ReadButton(char option)
 {
     static uint8_t counter = 0;
@@ -105,8 +103,10 @@ void Calc(char *str, char *separator, bool sign_equal)
 
 void loop(void)
 {
-		static char separator[2] = "\0";
-		char sign = ReadButton(0);
+    static char separator[2] = "\0";
+    static uint8_t separator_counter = 0;
+
+    char sign = ReadButton(0);
 
     if (sign == '+' || sign == '-' || sign == '*' || sign == '/')
     {
