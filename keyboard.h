@@ -1,6 +1,8 @@
 #ifndef keyboard_h
 #define keyboard_h
 
+#define KB_PORT PORTA
+
 #define KB_ROW1 5
 #define KB_ROW2 6
 #define KB_ROW3 7
