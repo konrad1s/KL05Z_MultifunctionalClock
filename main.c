@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+//typedef bool in calculate.h
 bool irqPIT = 0;
 
 void PIT_IRQHandler()
