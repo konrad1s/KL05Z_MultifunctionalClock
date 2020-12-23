@@ -66,14 +66,10 @@ void Calc(char *str, char *separator, bool sign_equal)
 
     float result;
 
-   // char *ptr = strtok(str, separator);
-   // float a = atof(ptr);
 		char* end;
 		float a = strtod( str, & end );
-   // ptr = strtok(NULL, '=');
-  //  float b = atof(ptr);
 		end++;
-float b = strtod( end, NULL );
+		float b = strtod( end, NULL );
     if (separator[0] == '+')
         result = a + b;
     else if (separator[0] == '-')
@@ -83,7 +79,6 @@ float b = strtod( end, NULL );
     else if (separator[0] == '/')
         result = a / b;
 
-  //  if (separator[0] == '/')
 		if(result-floor(result)!=0)
         snprintf(buffor, 20, "%.2f", result);
     else
