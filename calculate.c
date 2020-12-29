@@ -5,27 +5,31 @@
 #include <string.h>
 #include <math.h>
 
+// tab of char where the entire expression is stored
 char expression[20] = {"\0"};
 
+///////////////////////////////////////////////////////////
 // expression_check == 0 => do nothing
 // expression_check == 1 => there is = , clear expression tab, clear LCD
-// expression_check == 1 => there is more than one separator(+,-,*,/), print result on LCD, save result into expression tab
+// expression_check == 2 => there is more than one sign(+,-,*,/), print result on LCD, save result into expression tab
+///////////////////////////////////////////////////////////
 uint8_t expression_check = 0;
 
-char ReadButton(char option)
+///////////////////////////////////////////////////////////
+// Function add numbers to expression[] and print on LCD pressed button
+// return pressed button
+///////////////////////////////////////////////////////////
+char ReadButton(void)
 {
     static uint8_t counter = 0;
     char button;
 
-    if (option == 0)
-        button = KB_read();
-    else
-        button = option;
+    button = KB_read();
 
     char button_print[2] = {"\0"};
     if (button != 0)
     {
-        if (expression_check == 1)
+        if (expression_check == 1) //if there was "=", clear LCD and expression[]
         {
             counter = 0;
             memset(expression, 0, 20 * sizeof(char));
@@ -35,7 +39,7 @@ char ReadButton(char option)
 
         if (expression_check == 2)
         {
-            counter = strlen(expression);
+            counter = strlen(expression); //set new value of counter if there was more than one sign
             expression_check = 0;
         }
 
@@ -44,22 +48,25 @@ char ReadButton(char option)
             expression[counter] = button;
             counter++;
             button_print[0] = button;
-            LCD1602_Print(button_print);
+            LCD1602_Print(button_print); //print one number or sign
             return button;
         }
-        else
+        else // button == "C"
         {
             if (counter > 0)
             {
-                expression[--counter] = NULL;
-                LCD1602_ClearAll();
-                LCD1602_Print(expression);
+                expression[--counter] = NULL; // clear number in expression tab
+                LCD1602_ClearAll();           // clear LCD
+                LCD1602_Print(expression);    // print new expression
             }
         }
     }
     return 0x00;
 }
 
+///////////////////////////////////////////////////////////
+// Function that calculates the result
+///////////////////////////////////////////////////////////
 void Calc(char *str, char *separator, bool sign_equal)
 {
     expression_check = 1;
@@ -68,9 +75,11 @@ void Calc(char *str, char *separator, bool sign_equal)
     float result;
 
     char *end;
-    float a = strtod(str, &end);
-    end++;
-    float b = strtod(end, NULL);
+    float a = strtod(str, &end); //convert first number to float
+    end++;                       //sign between two numbers
+    float b = strtod(end, NULL); //convert second number to float
+
+    //calculate te result
     if (separator[0] == '+')
         result = a + b;
     else if (separator[0] == '-')
@@ -80,6 +89,7 @@ void Calc(char *str, char *separator, bool sign_equal)
     else if (separator[0] == '/')
         result = a / b;
 
+    //display the result depending on the type of number
     if (result - floor(result) != 0)
         snprintf(buffor, 20, "%.2f", result);
     else
@@ -101,12 +111,16 @@ void Calc(char *str, char *separator, bool sign_equal)
         LCD1602_Print(buffor);
 }
 
+///////////////////////////////////////////////////////////
+// loop function
+// checks if there was "=" sign or more than one sign(+,-,*,/)
+///////////////////////////////////////////////////////////
 void loop(void)
 {
     static char separator[2] = "\0";
     static uint8_t separator_counter = 0;
 
-    char sign = ReadButton(0);
+    char sign = ReadButton();
 
     if (sign == '+' || sign == '-' || sign == '*' || sign == '/')
     {

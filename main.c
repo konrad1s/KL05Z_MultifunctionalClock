@@ -16,17 +16,17 @@ void PIT_IRQHandler()
     {
         if (irqPIT == 0)
             irqPIT = 1;
-        PIT->CHANNEL[0].TFLG &= PIT_TFLG_TIF_MASK;
+        PIT->CHANNEL[0].TFLG &= PIT_TFLG_TIF_MASK; // clear the timer interrupt flag
     }
     NVIC_ClearPendingIRQ(PIT_IRQn);
 }
 
 int main(void)
 {
-    LCD1602_Init(); /* initialize LCD */
+    LCD1602_Init(); // initialize LCD
     LCD1602_Backlight(TRUE);
-    KB_init();
-    PIT_Init();
+    KB_init();  // initialize Keyboard
+    PIT_Init(); // initialize PIT
 
     while (1)
     {
@@ -36,8 +36,6 @@ int main(void)
             irqPIT = 0;
         }
 
-        __wfi(); // Save energy and wait for interrupt
+        __wfi(); // save energy and wait for interrupt
     }
 }
-
-

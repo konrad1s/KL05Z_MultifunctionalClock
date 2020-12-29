@@ -20,21 +20,21 @@ void KB_init(void)
     else if (KB_PORT == PORTB)
         SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK; // turn on clock on port B
 
-		// set pins mux as gpio
-    KB_PORT->PCR[KB_COLUMNE4] |= PORT_PCR_MUX(1); 
+    // set pins mux as gpio
+    KB_PORT->PCR[KB_COLUMNE4] |= PORT_PCR_MUX(1);
     KB_PORT->PCR[KB_COLUMNE3] |= PORT_PCR_MUX(1);
     KB_PORT->PCR[KB_COLUMNE2] |= PORT_PCR_MUX(1);
     KB_PORT->PCR[KB_COLUMNE1] |= PORT_PCR_MUX(1);
 
-    KB_PORT->PCR[KB_ROW4] |= PORT_PCR_MUX(1); 
+    KB_PORT->PCR[KB_ROW4] |= PORT_PCR_MUX(1);
     KB_PORT->PCR[KB_ROW3] |= PORT_PCR_MUX(1);
     KB_PORT->PCR[KB_ROW2] |= PORT_PCR_MUX(1);
     KB_PORT->PCR[KB_ROW1] |= PORT_PCR_MUX(1);
 
-		// set rows pins as output
+    // set rows pins as output
     if (KB_PORT == PORTA)
     {
-        PTA->PDDR |= (1 << KB_ROW4); 
+        PTA->PDDR |= (1 << KB_ROW4);
         PTA->PDDR |= (1 << KB_ROW3);
         PTA->PDDR |= (1 << KB_ROW2);
         PTA->PDDR |= (1 << KB_ROW1);
@@ -47,15 +47,16 @@ void KB_init(void)
         PTB->PDDR |= (1 << KB_ROW1);
     }
 
-		// enable pull-up resistor on columns
-    KB_PORT->PCR[KB_COLUMNE4] |= PORT_PCR_PE_MASK | PORT_PCR_PS_MASK; 
+    // enable pull-up resistor on columns
+    KB_PORT->PCR[KB_COLUMNE4] |= PORT_PCR_PE_MASK | PORT_PCR_PS_MASK;
     KB_PORT->PCR[KB_COLUMNE3] |= PORT_PCR_PE_MASK | PORT_PCR_PS_MASK;
     KB_PORT->PCR[KB_COLUMNE2] |= PORT_PCR_PE_MASK | PORT_PCR_PS_MASK;
     KB_PORT->PCR[KB_COLUMNE1] |= PORT_PCR_PE_MASK | PORT_PCR_PS_MASK;
 }
 
 ///////////////////////////////////////////////////////////
-// Function returns char from KB_map[][], if button is not pressed return 0
+// Function read pressed button
+// returns char from KB_map[][], if button is not pressed return 0
 ///////////////////////////////////////////////////////////
 char KB_read(void)
 {
@@ -73,7 +74,7 @@ char KB_read(void)
             if (KB_PORT == PORTA)
             {
                 if ((PTA->PDIR & (1 << KB_columnes[j])) == 0) // check if button is pressed
-                    result = KB_map[i][j];	
+                    result = KB_map[i][j];
             }
             else if (KB_PORT == PORTB)
             {
