@@ -51,7 +51,7 @@ int main(void)
         }
 				if (irqRTC)
 				{
-					display_time();
+				//	display_time();
 					irqRTC=0;
 				}
 				
@@ -61,7 +61,6 @@ int main(void)
 
 void display_time(void)
 {
-		LCD1602_SetCursor(0,1);
 		char time_print[20] = { "00:00:00" };
     rtc_seconds = rtc_seconds_counter % 60;
     rtc_minutes = rtc_seconds_counter / 60;
@@ -69,5 +68,5 @@ void display_time(void)
     rtc_minutes %= 60;
     rtc_hours %= 3600;
 		sprintf(time_print, "Time: %2i:%02i:%02i", rtc_hours, rtc_minutes,	rtc_seconds);
-		LCD1602_Print(time_print);
+		LCD1602_PrintXY(time_print,0,1);
 }

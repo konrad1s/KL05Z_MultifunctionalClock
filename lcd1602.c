@@ -72,6 +72,13 @@ void LCD1602_ClearAll(void) {
 	LCD1602_Write8(LCD_CLEARDISPLAY, 0);
 }
 
+void LCD1602_ClearRow(uint8_t rows)
+{
+	char temp[20]="                ";
+	LCD1602_PrintXY(temp,0,rows);
+	LCD1602_SetCursor(0,rows);
+}
+
 void LCD1602_Print(char *str) {
 
   uint8_t str_len = 0;
@@ -80,6 +87,12 @@ void LCD1602_Print(char *str) {
     LCD1602_Write8(str[str_len], 1);
     ++str_len;
   }
+}
+
+void LCD1602_PrintXY(char *text, uint8_t columnes, uint8_t rows)
+{
+	LCD1602_SetCursor(columnes,rows);
+	LCD1602_Print(text);
 }
 
 void LCD1602_PrintNum(int number) {

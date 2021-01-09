@@ -44,5 +44,19 @@ void LCD1602_SetCursor(uint8_t col, uint8_t row);
  * @param State of the backlight.
  */
 void LCD1602_Backlight(uint8_t state);
+/**
+ * @brief Set cursor on display and print text.
+ *
+ * @param String to display.
+ * @param Column.
+ * @param Row.
+ */
+void LCD1602_PrintXY(char *text, uint8_t columnes, uint8_t rows);
+/**
+ * @brief Clear one row
+ *
+ * @param Row
+ */
+void LCD1602_ClearRow(uint8_t rows);
 
 #endif  /* LCD1602_H */
