@@ -1,34 +1,41 @@
 #include "MKL05Z4.h"
+#include "rtc.h"
 
 void RTC_init(void)
 {
-    unsigned int prev_val;
-    // enable the clock to SRTC module
-    SIM->SCGC6 |= SIM_SCGC6_RTC_MASK;
+  int i;
+  // enable the clock to SRTC module
+  SIM->SCGC6 |= SIM_SCGC6_RTC_MASK;
 
-    //select RTC clock
-    SIM->SOPT1 &= ~SIM_SOPT1_OSC32KSEL_MASK;
-    SIM->SOPT1 |= SIM_SOPT1_OSC32KSEL(0);
+  // select RTC clock, system oscillator (OSC32KCLK)
+  SIM->SOPT1 &= ~SIM_SOPT1_OSC32KSEL_MASK;
+  SIM->SOPT1 |= SIM_SOPT1_OSC32KSEL(0);
 
-    //enable time seconds interrupt
-    RTC->IER = RTC_IER_TSIE_MASK;
+  // reset RTC_CR bit
+  RTC->CR |= RTC_CR_SWR_MASK;
+  RTC->CR &= ~RTC_CR_SWR_MASK;
 
-    //reset RTC if time is invalid (Time Invalid Flag)
-    if (RTC->SR & RTC_SR_TIF_MASK)
-    {
-        RTC->CR |= RTC_CR_SWR_MASK;
-        RTC->CR &= ~RTC_CR_SWR_MASK;
-    }
+  //  clear TIF (Time Invalid Flag)
+  if (RTC->SR & RTC_SR_TIF_MASK)
+  {
+    RTC->TSR = 0x00000000;
+  }
 
-    //read and set prev value
-    prev_val = RTC->TSR;
-    RTC->TSR = prev_val;
+  //enable time seconds interrupt
+  RTC->IER |= RTC_IER_TSIE_MASK;
 
-    // enable rtc
-    RTC->SR |= RTC_SR_TCE_MASK;
+  //set value
+  RTC->TSR = 1;
 
-    //enable RTC seconds interrupt
-    NVIC_ClearPendingIRQ(RTC_Seconds_IRQn);
-    NVIC_SetPriority(RTC_Seconds_IRQn, 10);
-    NVIC_EnableIRQ(RTC_Seconds_IRQn);
+  //enable oscilator and wait for stabilization
+  RTC->CR |= RTC_CR_OSCE_MASK | RTC_CR_SC16P_MASK;
+  for (i = 0; i < 0x600000; i++)
+    ;
+
+  // enable rtc
+  RTC->SR |= RTC_SR_TCE_MASK;
+
+  //enable RTC seconds interrupt
+  NVIC_ClearPendingIRQ(RTC_Seconds_IRQn);
+  NVIC_EnableIRQ(RTC_Seconds_IRQn);
 }

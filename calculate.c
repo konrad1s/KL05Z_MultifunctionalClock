@@ -34,6 +34,7 @@ char ReadButton(void)
             counter = 0;
             memset(expression, 0, 20 * sizeof(char));
             LCD1602_ClearAll();
+						LCD1602_SetCursor(0,0);
             expression_check = 0;
         }
 
@@ -57,6 +58,7 @@ char ReadButton(void)
             {
                 expression[--counter] = NULL; // clear number in expression tab
                 LCD1602_ClearAll();           // clear LCD
+								LCD1602_SetCursor(0,0);
                 LCD1602_Print(expression);    // print new expression
             }
         }
