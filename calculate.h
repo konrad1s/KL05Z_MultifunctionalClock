@@ -3,8 +3,8 @@
 
 typedef enum
 {
-    false,
-    true
+  false,
+  true
 } bool;
 
 char ReadButton(void);
