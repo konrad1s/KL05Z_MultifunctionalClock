@@ -9,6 +9,7 @@
 
 //typedef bool in calculate.h
 bool irqPIT = 0;
+uint32_t rtc_seconds;
 
 void PIT_IRQHandler()
 {
@@ -19,6 +20,11 @@ void PIT_IRQHandler()
         PIT->CHANNEL[0].TFLG &= PIT_TFLG_TIF_MASK; // clear the timer interrupt flag
     }
     NVIC_ClearPendingIRQ(PIT_IRQn);
+}
+
+void RTC_Seconds_IRQHandler(void)
+{
+    rtc_seconds++;
 }
 
 int main(void)
