@@ -56,6 +56,6 @@ void display_time(void)
     rtc_hours = rtc_seconds_counter / 3600;
     rtc_minutes %= 60;
     rtc_hours %= 3600;
-		sprintf(time_print, "%2i:%02i:%02i\0", rtc_hours, rtc_minutes,	rtc_seconds);
+		sprintf(time_print, "%2i:%02i:%02i  \0", rtc_hours, rtc_minutes,	rtc_seconds);
 		LCD1602_PrintXY(time_print,6,1);
 }

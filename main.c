@@ -34,20 +34,26 @@ void RTC_Seconds_IRQHandler(void)
 
 void PORTB_IRQHandler(void)
 {
-	if(PORTB->ISFR &(1<<BUT1)) 
-	{
-		PORTB->PCR[BUT1] |= PORT_PCR_ISF_MASK;	//clear interrupt
-	}
-	
-		if(PORTB->ISFR &(1<<BUT2)) 
-	{
-		PORTB->PCR[BUT2] |= PORT_PCR_ISF_MASK;	//clear interrupt
-	}
-	
-		if(PORTB->ISFR &(1<<BUT3)) 
-	{
-		PORTB->PCR[BUT3] |= PORT_PCR_ISF_MASK;	//clear interrupt
-	}
+  if (PORTB->ISFR & (1 << BUT1))
+  {
+		LCD1602_PrintXY("BUT1\0", 0, 0);
+		while ((FPTB->PDIR&(1 << BUT1)) == 0); //wait for button release
+    PORTB->PCR[BUT1] |= PORT_PCR_ISF_MASK; //clear interrupt
+  }
+
+  if (PORTB->ISFR & (1 << BUT2))
+  {
+			LCD1602_PrintXY("BUT2\0", 0, 0);
+		while ((FPTB->PDIR&(1 << BUT2)) == 0); //wait for button release
+    PORTB->PCR[BUT2] |= PORT_PCR_ISF_MASK; //clear interrupt
+  }
+
+  if (PORTB->ISFR & (1 << BUT3))
+  {
+		LCD1602_PrintXY("BUT3\0", 0, 0);
+		while ((FPTB->PDIR&(1 << BUT3)) == 0); //wait for button release
+    PORTB->PCR[BUT3] |= PORT_PCR_ISF_MASK; //clear interrupt
+  }
 }
 
 int main(void)
@@ -57,6 +63,7 @@ int main(void)
   KB_init();  // initialize Keyboard
   PIT_Init(); // initialize PIT
   RTC_init(); // initialize RTC
+	BUTTOONS_init(); // initialize buttons
 
   LCD1602_PrintXY("Time:\0", 0, 1);
 
@@ -67,10 +74,10 @@ int main(void)
       loop();
       irqPIT = 0;
     }
-    if (irqRTC)
-    {
+   if (irqRTC)
+   {
       display_time();
-      irqRTC = 0;
+     irqRTC = 0;
     }
 
     __wfi(); // save energy and wait for interrupt
