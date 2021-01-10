@@ -6,7 +6,7 @@
 #include <math.h>
 
 // tab of char where the entire expression is stored
-char expression[20] = {"\0"};
+char expression[30] = {"\0"};
 
 ///////////////////////////////////////////////////////////
 // expression_check == 0 => do nothing
@@ -33,8 +33,7 @@ char ReadButton(void)
         {
             counter = 0;
             memset(expression, 0, 20 * sizeof(char));
-            LCD1602_ClearAll();
-						LCD1602_SetCursor(0,0);
+            LCD1602_ClearRow(0);
             expression_check = 0;
         }
 
@@ -47,9 +46,9 @@ char ReadButton(void)
         if (button != 'C')
         {
             expression[counter] = button;
-            counter++;
             button_print[0] = button;
-            LCD1602_Print(button_print); //print one number or sign
+            LCD1602_PrintXY(button_print,counter,0); //print one number or sign
+						counter++;
             return button;
         }
         else // button == "C"
@@ -57,9 +56,8 @@ char ReadButton(void)
             if (counter > 0)
             {
                 expression[--counter] = NULL; // clear number in expression tab
-                LCD1602_ClearAll();           // clear LCD
-								LCD1602_SetCursor(0,0);
-                LCD1602_Print(expression);    // print new expression
+                LCD1602_ClearRow(0);
+                LCD1602_PrintXY(expression,0,0);    // print new expression
             }
         }
     }
@@ -90,6 +88,8 @@ void Calc(char *str, char *separator, bool sign_equal)
         result = a * b;
     else if (separator[0] == '/')
         result = a / b;
+		
+		int lcd_position=strlen(expression);
 
     //display the result depending on the type of number
     if (result - floor(result) != 0)
@@ -104,13 +104,13 @@ void Calc(char *str, char *separator, bool sign_equal)
         else
             snprintf(expression, 20, "%.0f%c\0", result, separator[1]);
 
-        LCD1602_ClearAll();
-        LCD1602_Print(expression);
+        LCD1602_ClearRow(0);
+        LCD1602_PrintXY(expression,0,0);
 
         expression_check = 2;
     }
     else
-        LCD1602_Print(buffor);
+        LCD1602_PrintXY(buffor,lcd_position,0);
 }
 
 ///////////////////////////////////////////////////////////

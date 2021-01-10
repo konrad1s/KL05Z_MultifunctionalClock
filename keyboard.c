@@ -34,7 +34,7 @@ void KB_init(void)
     // set rows pins as output
     if (KB_PORT == PORTA)
     {
-        PTA->PDDR |= (1 << KB_ROW4);
+        PTA->PDDR = (1 << KB_ROW4);
         PTA->PDDR |= (1 << KB_ROW3);
         PTA->PDDR |= (1 << KB_ROW2);
         PTA->PDDR |= (1 << KB_ROW1);
@@ -65,9 +65,9 @@ char KB_read(void)
     for (uint8_t i = 0; i < 4; i++)
     {
         if (KB_PORT == PORTA)
-            PTA->PDOR &= ~(1 << KB_rows[i]); // set row as pull-down
+            PTA->PDOR &= ~(1 << KB_rows[i]); // set input row as pull-down
         else if (KB_PORT == PORTB)
-            PTB->PDOR &= ~(1 << KB_rows[i]); // set row as pull-down
+            PTB->PDOR &= ~(1 << KB_rows[i]); // set input row as pull-down
 
         for (uint8_t j = 0; j < 4; j++)
         {
