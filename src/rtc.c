@@ -1,6 +1,6 @@
 #include "MKL05Z4.h"
-#include "rtc.h"
-#include "lcd1602.h"
+#include "../inc/rtc.h"
+#include "../inc/lcd1602.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

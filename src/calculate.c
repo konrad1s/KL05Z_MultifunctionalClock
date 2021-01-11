@@ -1,7 +1,7 @@
 #include "MKL05Z4.h"
-#include "calculate.h"
-#include "keyboard.h"
-#include "frdm_bsp.h"
+#include "../inc/calculate.h"
+#include "../inc/keyboard.h"
+#include "../inc/frdm_bsp.h"
 #include <string.h>
 #include <math.h>
 

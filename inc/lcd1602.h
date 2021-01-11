@@ -13,7 +13,7 @@
 #ifndef LCD1602_H
 #define LCD1602_H
 
-#include "frdm_bsp.h"
+#include "../inc/frdm_bsp.h"
 #include "i2c.h"
 
 

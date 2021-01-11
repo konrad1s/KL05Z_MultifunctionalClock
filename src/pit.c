@@ -1,5 +1,5 @@
 #include "MKL05Z4.h"
-#include "pit.h"
+#include "../inc/pit.h"
 
 void PIT_Init(void)
 {

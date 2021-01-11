@@ -1,5 +1,5 @@
 #include "MKL05Z4.h"
-#include "buttons.h"
+#include "../inc/buttons.h"
 
 void BUTTOONS_init()
 {

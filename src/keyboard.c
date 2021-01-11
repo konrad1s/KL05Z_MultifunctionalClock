@@ -1,5 +1,5 @@
 #include "MKL05Z4.h"
-#include "keyboard.h"
+#include "../inc/keyboard.h"
 
 char KB_map[4][4] = {
     {'1', '2', '3', '+'},

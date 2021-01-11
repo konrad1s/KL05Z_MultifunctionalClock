@@ -1,10 +1,11 @@
 #include "MKL05Z4.h"
-#include "keyboard.h"
-#include "lcd1602.h"
-#include "pit.h"
-#include "calculate.h"
-#include "rtc.h"
-#include "buttons.h"
+#include "../inc/keyboard.h"
+#include "../inc/lcd1602.h"
+#include "../inc/pit.h"
+#include "../inc/calculate.h"
+#include "../inc/rtc.h"
+#include "../inc/buttons.h"
+#include "../inc/dma.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -12,12 +13,8 @@
 bool irqPIT = 0;
 bool irqRTC = 1;
 
-uint16_t DMAvalue[8];
-
 uint32_t rtc_seconds_counter = 0;
 uint32_t rtc_hours = 0, rtc_minutes = 0, rtc_seconds = 0;
-
-extern unsigned int Image$$value$$Base;
 
 void PIT_IRQHandler()
 {
@@ -25,7 +22,6 @@ void PIT_IRQHandler()
   {
     if (irqPIT == 0)
       irqPIT = 1;
-    value = 1;
     PIT->CHANNEL[0].TFLG &= PIT_TFLG_TIF_MASK; // clear the timer interrupt flag
   }
   NVIC_ClearPendingIRQ(PIT_IRQn);
@@ -66,8 +62,8 @@ void PORTB_IRQHandler(void)
 
 void DMA0_IRQHandler(void)
 {
-  DMA_DSR_BCR0 |= DMA_DSR_BCR_DONE_MASK; // clear interrupt
-  DMA_DSR_BCR0 |= DMA_DSR_BCR_BCR(2);    // 2 bytes (16 bits) per transfer
+  DMA0->DMA[0].DSR_BCR |= DMA_DSR_BCR_DONE_MASK; // clear interrupt
+  DMA0->DMA[0].DSR_BCR |= DMA_DSR_BCR_BCR(2);    // 2 bytes (16 bits) per transfer
 }
 
 int main(void)
