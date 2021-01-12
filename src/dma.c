@@ -1,8 +1,6 @@
 
 #include "../inc/dma.h"
 
-//uint16_t DMAvalue[8];
-
 void DMA_init()
 {
   // enable clocks
@@ -16,7 +14,7 @@ void DMA_init()
   if (((DMA0->DMA[0].DSR_BCR & DMA_DSR_BCR_DONE_MASK) == DMA_DSR_BCR_DONE_MASK) | ((DMA0->DMA[0].DSR_BCR & DMA_DSR_BCR_BES_MASK) == DMA_DSR_BCR_BES_MASK) | ((DMA0->DMA[0].DSR_BCR & DMA_DSR_BCR_BED_MASK) == DMA_DSR_BCR_BED_MASK) | ((DMA0->DMA[0].DSR_BCR & DMA_DSR_BCR_CE_MASK) == DMA_DSR_BCR_CE_MASK))
     DMA0->DMA[0].DSR_BCR |= DMA_DSR_BCR_DONE_MASK;
 
-  DMA0->DMA[0].SAR = (uint32_t)&ADC0_RA;      // source address
+  DMA0->DMA[0].SAR = (uint32_t)&ADC0->R[0];  // source address
   DMA0->DMA[0].DSR_BCR = DMA_DSR_BCR_BCR(2); // 2 bytes (16 bits) per transfer
 
   // DMA settings:
@@ -35,7 +33,7 @@ void DMA_init()
                        DMA_DCR_DSIZE(2));
 
   // destination address
-  DMA0->DMA[0].DAR = (uint32_t)&DMAvalue;
+  DMA0->DMA[0].DAR = (uint32_t)&DMAvalue[0];
 
   // DMA channel ADC0 = 40
   DMAMUX0->CHCFG[0] |= 0x28;

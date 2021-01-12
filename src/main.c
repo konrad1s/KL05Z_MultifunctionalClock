@@ -6,12 +6,21 @@
 #include "../inc/rtc.h"
 #include "../inc/buttons.h"
 #include "../inc/dma.h"
+#include "../inc/adc.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
 bool irqPIT = 0;
 bool irqRTC = 1;
+bool irqDMA=0;
+
+float adc_volt_coeff = ((float)(((float)2.91) / 4095)); 
+float wynik=0;
+float Ut25 = 0.716;
+float m = 0.00162;
+
+uint32_t DMAvalue[8];
 
 uint32_t rtc_seconds_counter = 0;
 uint32_t rtc_hours = 0, rtc_minutes = 0, rtc_seconds = 0;
@@ -22,6 +31,7 @@ void PIT_IRQHandler()
   {
     if (irqPIT == 0)
       irqPIT = 1;
+		ADC0->SC1[0]=ADC_SC1_ADCH(26)| (ADC0->SC1[0] & (ADC_SC1_AIEN_MASK));
     PIT->CHANNEL[0].TFLG &= PIT_TFLG_TIF_MASK; // clear the timer interrupt flag
   }
   NVIC_ClearPendingIRQ(PIT_IRQn);
@@ -62,7 +72,9 @@ void PORTB_IRQHandler(void)
 
 void DMA0_IRQHandler(void)
 {
-  DMA0->DMA[0].DSR_BCR |= DMA_DSR_BCR_DONE_MASK; // clear interrupt
+	irqDMA=1;
+	
+	DMA0->DMA[0].DSR_BCR |= DMA_DSR_BCR_DONE_MASK; // clear interrupt
   DMA0->DMA[0].DSR_BCR |= DMA_DSR_BCR_BCR(2);    // 2 bytes (16 bits) per transfer
 }
 
@@ -74,6 +86,11 @@ int main(void)
   PIT_Init();      // initialize PIT
   RTC_init();      // initialize RTC
   BUTTOONS_init(); // initialize buttons
+	ADC_init();
+	DMA_init();
+	
+	int avg=0;
+	char buff[20]="\0";
 
   LCD1602_PrintXY("Time:\0", 0, 1);
 
@@ -81,14 +98,25 @@ int main(void)
   {
     if (irqPIT)
     {
-      loop();
+			
+    //  loop();
       irqPIT = 0;
     }
     if (irqRTC)
     {
-      display_time();
+    // display_time();
       irqRTC = 0;
     }
+		if(irqDMA)
+		{
+			for(int i = 0; i < 2; i++)
+				avg += DMAvalue[i];
+			avg /= 2;
+			wynik = 25.0 - (((DMAvalue[1]&0xFFFF) * adc_volt_coeff) - Ut25) / m;
+			snprintf(buff, 20, "%f", wynik);
+			LCD1602_PrintXY(buff,0,0);
+			irqDMA=0;
+		}
 
     __wfi(); // save energy and wait for interrupt
   }
