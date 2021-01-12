@@ -19,9 +19,12 @@ uint8_t expression_check = 0;
 // Function add numbers to expression[] and print on LCD pressed button
 // return pressed button
 ///////////////////////////////////////////////////////////
+uint8_t counter = 0;
+uint8_t separator_counter = 0;
+
 char ReadButton(void)
 {
-    static uint8_t counter = 0;
+    
     char button;
 
     button = KB_read();
@@ -120,7 +123,6 @@ void Calc(char *str, char *separator, bool sign_equal)
 void CalculatorLoop(void)
 {
     static char separator[2] = "\0";
-    static uint8_t separator_counter = 0;
 
     char sign = ReadButton();
 
@@ -140,4 +142,11 @@ void CalculatorLoop(void)
         separator_counter = 0;
         Calc(expression, separator, 1);
     }
+}
+
+void CalculatorReset(void)
+{
+	memset(expression, 0, 20 * sizeof(char));
+	counter=0;
+	separator_counter=0;
 }

@@ -21,6 +21,7 @@ void chooseMode()
   if (prev_mode != mode)
   {
     LCD1602_ClearRow(0);
+		CalculatorReset();
     prev_mode = mode;
   }
 }
