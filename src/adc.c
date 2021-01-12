@@ -29,7 +29,7 @@ uint8_t ADC_calibration()
 
   SIM->SCGC6 |= SIM_SCGC6_ADC0_MASK; // enable ADC clock
 
-  ADC0->SC2 &= ~ADC_SC2_ADTRG_MASK; // software conv trigger
+  ADC0->SC2 &= ~ADC_SC2_ADTRG_MASK;                       // software conv trigger
   ADC0->SC3 &= (~ADC_SC3_ADCO_MASK & ~ADC_SC3_AVGS_MASK); // single conv
   ADC0->SC3 |= (ADC_SC3_AVGE_MASK | ADC_SC3_AVGS(3));     // averaging = 32
 
@@ -60,4 +60,3 @@ uint8_t ADC_calibration()
   ADC0->SC3 &= ~ADC_SC3_CAL_MASK; // clear calibration bit
   return 0;
 }
-

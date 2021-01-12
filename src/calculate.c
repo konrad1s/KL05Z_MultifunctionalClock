@@ -47,8 +47,8 @@ char ReadButton(void)
         {
             expression[counter] = button;
             button_print[0] = button;
-            LCD1602_PrintXY(button_print,counter,0); //print one number or sign
-						counter++;
+            LCD1602_PrintXY(button_print, counter, 0); //print one number or sign
+            counter++;
             return button;
         }
         else // button == "C"
@@ -57,7 +57,7 @@ char ReadButton(void)
             {
                 expression[--counter] = NULL; // clear number in expression tab
                 LCD1602_ClearRow(0);
-                LCD1602_PrintXY(expression,0,0);    // print new expression
+                LCD1602_PrintXY(expression, 0, 0); // print new expression
             }
         }
     }
@@ -88,8 +88,8 @@ void Calc(char *str, char *separator, bool sign_equal)
         result = a * b;
     else if (separator[0] == '/')
         result = a / b;
-		
-		int lcd_position=strlen(expression);
+
+    int lcd_position = strlen(expression);
 
     //display the result depending on the type of number
     if (result - floor(result) != 0)
@@ -105,12 +105,12 @@ void Calc(char *str, char *separator, bool sign_equal)
             snprintf(expression, 20, "%.0f%c\0", result, separator[1]);
 
         LCD1602_ClearRow(0);
-        LCD1602_PrintXY(expression,0,0);
+        LCD1602_PrintXY(expression, 0, 0);
 
         expression_check = 2;
     }
     else
-        LCD1602_PrintXY(buffor,lcd_position,0);
+        LCD1602_PrintXY(buffor, lcd_position, 0);
 }
 
 ///////////////////////////////////////////////////////////

@@ -1,6 +1,14 @@
 
 #include "../inc/dma.h"
 
+uint32_t DMAvalue[5];
+
+void DMA0_IRQHandler(void)
+{
+  DMA0->DMA[0].DSR_BCR |= DMA_DSR_BCR_DONE_MASK; // clear interrupt
+  DMA0->DMA[0].DSR_BCR |= DMA_DSR_BCR_BCR(2);    // 2 bytes (16 bits) per transfer
+}
+
 void DMA_init()
 {
   // enable clocks
