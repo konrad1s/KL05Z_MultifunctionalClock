@@ -109,8 +109,8 @@ int main(void)
     }
 		if(irqDMA)
 		{
-			wynik = 25.0 - (((DMAvalue[0]&0xFFFF) * adc_volt_coeff) - Ut25) / m;
-			snprintf(buff, 20, "T=%0.1f%cC  ", wynik,0xDF);
+			wynik = 25.0 - (((DMAvalue[1]&0xFFFF) * adc_volt_coeff) - Ut25) / m;
+			snprintf(buff, 20, "T=%0.1f%cC   ", wynik,0xDF);
 			LCD1602_PrintXY(buff,0,0);
 			irqDMA=0;
 		}
