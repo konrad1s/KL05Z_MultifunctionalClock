@@ -20,7 +20,7 @@ float wynik=0;
 float Ut25 = 0.716;
 float m = 0.00162;
 
-uint32_t DMAvalue[8];
+uint32_t DMAvalue[2];
 
 uint32_t rtc_seconds_counter = 0;
 uint32_t rtc_hours = 0, rtc_minutes = 0, rtc_seconds = 0;
@@ -104,16 +104,13 @@ int main(void)
     }
     if (irqRTC)
     {
-    // display_time();
+     display_time();
       irqRTC = 0;
     }
 		if(irqDMA)
 		{
-			for(int i = 0; i < 2; i++)
-				avg += DMAvalue[i];
-			avg /= 2;
-			wynik = 25.0 - (((DMAvalue[1]&0xFFFF) * adc_volt_coeff) - Ut25) / m;
-			snprintf(buff, 20, "%f", wynik);
+			wynik = 25.0 - (((DMAvalue[0]&0xFFFF) * adc_volt_coeff) - Ut25) / m;
+			snprintf(buff, 20, "T=%0.1f%cC  ", wynik,0xDF);
 			LCD1602_PrintXY(buff,0,0);
 			irqDMA=0;
 		}

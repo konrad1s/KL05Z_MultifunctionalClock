@@ -6,12 +6,16 @@ void ADC_init()
 
     // bus/2 clock source, divede 4, long sample time, 12bit conversion
     ADC0->CFG1 = ADC_CFG1_ADICLK(1) | ADC_CFG1_ADIV(0x02) | ADC_CFG1_ADLSMP_MASK | ADC_CFG1_MODE(1);
+	
+		ADC0->CFG2 = ADC_CFG2_ADHSC_MASK;	
 
     // DMA enable
     ADC0->SC2 |= ADC_SC2_DMAEN_MASK;
 
     // reset SC3
     ADC0->SC3 = 0;
+		// avranging 32 samples
+		ADC0->SC3  = ADC_SC3_AVGE_MASK | ADC_SC3_AVGS(3);
 
     // disable module
     ADC0->SC1[0] |= ADC_SC1_ADCH(31);

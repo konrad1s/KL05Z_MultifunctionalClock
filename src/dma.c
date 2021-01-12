@@ -15,7 +15,7 @@ void DMA_init()
     DMA0->DMA[0].DSR_BCR |= DMA_DSR_BCR_DONE_MASK;
 
   DMA0->DMA[0].SAR = (uint32_t)&ADC0->R[0];  // source address
-  DMA0->DMA[0].DSR_BCR = DMA_DSR_BCR_BCR(2); // 2 bytes (16 bits) per transfer
+  DMA0->DMA[0].DSR_BCR = DMA_DSR_BCR_BCR(2); // 16 bits per transfer
 
   // DMA settings:
   // enable interrupt
