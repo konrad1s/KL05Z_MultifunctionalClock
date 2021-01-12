@@ -1,12 +1,17 @@
 #include "MKL05Z4.h"
 #include "../inc/buttons.h"
 #include "../inc/rtc.h"
+#include "../inc/mode.h"
 
 void PORTB_IRQHandler(void)
 {
   if (PORTB->ISFR & (1 << BUT1))
   {
-    rtc_seconds_counter += 3600;
+    if (mode == 1)
+      mode = 0;
+    else
+      mode = 1;
+
     while ((FPTB->PDIR & (1 << BUT1)) == 0)
       ;                                    //wait for button release
     PORTB->PCR[BUT1] |= PORT_PCR_ISF_MASK; //clear interrupt

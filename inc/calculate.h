@@ -9,6 +9,6 @@ typedef enum
 
 char ReadButton(void);
 void Calc(char *str, char *separator, bool sign_equal);
-void loop(void);
+void CalculatorLoop(void);
 
 #endif

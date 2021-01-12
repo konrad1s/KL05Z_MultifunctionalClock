@@ -117,7 +117,7 @@ void Calc(char *str, char *separator, bool sign_equal)
 // loop function
 // checks if there was "=" sign or more than one sign(+,-,*,/)
 ///////////////////////////////////////////////////////////
-void loop(void)
+void CalculatorLoop(void)
 {
     static char separator[2] = "\0";
     static uint8_t separator_counter = 0;
