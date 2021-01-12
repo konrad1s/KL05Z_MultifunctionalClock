@@ -24,7 +24,7 @@ uint8_t separator_counter = 0;
 
 char ReadButton(void)
 {
-    
+
     char button;
 
     button = KB_read();
@@ -146,7 +146,7 @@ void CalculatorLoop(void)
 
 void CalculatorReset(void)
 {
-	memset(expression, 0, 20 * sizeof(char));
-	counter=0;
-	separator_counter=0;
+    memset(expression, 0, 20 * sizeof(char));
+    counter = 0;
+    separator_counter = 0;
 }

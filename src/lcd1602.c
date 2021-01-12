@@ -61,6 +61,16 @@ void LCD1602_Init(void) {
 	LCD1602_Write8(0x0C,0);					/* cursor off, blink off */
 }
 
+void LCD1602_Blink_On(void)
+{
+	LCD1602_Write8(0x0D, 0); /* cursor off, blink on */
+}
+
+void LCD1602_Blink_Off(void)
+{
+	LCD1602_Write8(0x0C, 0); /* cursor off, blink off */
+}
+
 void LCD1602_SetCursor(uint8_t col, uint8_t row) {
 	
 	if (row>1) row = 1;   /* prevent from too many rows */

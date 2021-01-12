@@ -21,7 +21,7 @@ void PORTB_IRQHandler(void)
 
   if (PORTB->ISFR & (1 << BUT2))
   {
-    if (RTC_mode < 3)
+    if (RTC_mode < 4)
       RTC_mode++;
     else
       RTC_mode = 0;

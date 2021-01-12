@@ -59,4 +59,7 @@ void LCD1602_PrintXY(char *text, uint8_t columnes, uint8_t rows);
  */
 void LCD1602_ClearRow(uint8_t rows);
 
+void LCD1602_Blink_On(void);
+void LCD1602_Blink_Off(void);
+
 #endif  /* LCD1602_H */
