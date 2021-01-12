@@ -22,11 +22,7 @@ int main(void)
 
   while (1)
   {
-    if (irqRTC)
-    {
-      display_time();
-      irqRTC = 0;
-    }
+    chooseModeRTC();
     chooseMode();
 
     __wfi(); // save energy and wait for interrupt

@@ -3,6 +3,8 @@
 #include "../inc/rtc.h"
 #include "../inc/mode.h"
 
+uint8_t but3 = 0;
+
 void PORTB_IRQHandler(void)
 {
   if (PORTB->ISFR & (1 << BUT1))
@@ -19,7 +21,10 @@ void PORTB_IRQHandler(void)
 
   if (PORTB->ISFR & (1 << BUT2))
   {
-    LCD1602_PrintXY("BUT2\0", 0, 0);
+    if (RTC_mode < 3)
+      RTC_mode++;
+    else
+      RTC_mode = 0;
     while ((FPTB->PDIR & (1 << BUT2)) == 0)
       ;                                    //wait for button release
     PORTB->PCR[BUT2] |= PORT_PCR_ISF_MASK; //clear interrupt
@@ -27,7 +32,7 @@ void PORTB_IRQHandler(void)
 
   if (PORTB->ISFR & (1 << BUT3))
   {
-    LCD1602_PrintXY("BUT3\0", 0, 0);
+    but3 = 1;
     while ((FPTB->PDIR & (1 << BUT3)) == 0)
       ;                                    //wait for button release
     PORTB->PCR[BUT3] |= PORT_PCR_ISF_MASK; //clear interrupt
