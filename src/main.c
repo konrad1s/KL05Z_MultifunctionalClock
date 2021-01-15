@@ -7,6 +7,7 @@
 #include "../inc/buttons.h"
 #include "../inc/dma.h"
 #include "../inc/adc.h"
+#include "../inc/uart.h"
 #include "../inc/mode.h"
 #include <stdio.h>
 #include <string.h>
@@ -39,4 +40,5 @@ void Init_all()
   BUTTOONS_init(); // initialize buttons
   ADC_init();      // initialize ADC
   DMA_init();      // initialize DMA
+	UART0_Init();
 }

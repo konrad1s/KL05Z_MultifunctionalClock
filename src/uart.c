@@ -1,4 +1,7 @@
-#include "../inc/uart0.h"
+#include "../inc/uart.h"
+#include "../inc/lcd1602.h"
+
+circular_buff tx_buffor, rx_buffor;
 
 void UART0_Init(void)
 {
@@ -38,4 +41,8 @@ void UART0_Init(void)
 
 void UART0_IRQHandler()
 {
+    if (UART0->S1 & UART0_S1_RDRF_MASK)
+    {
+        LCD1602_PrintXY("bluetooth", 0, 0);
+    }
 }

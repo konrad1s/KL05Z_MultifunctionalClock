@@ -5,10 +5,10 @@
 #include "../inc/circular_buff.h"
 
 #define BAUDRATE 9600
+#define DEFAULT_SYSTEM_CLOCK 41943040u
 
 void UART0_Init(void);
-void UART0_IRQHandler();
 
-circular_buf tx_buffor, rx_buffor;
+extern circular_buff tx_buffor, rx_buffor;
 
 #endif

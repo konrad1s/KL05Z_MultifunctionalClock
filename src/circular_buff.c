@@ -1,23 +1,23 @@
 #include "../inc/circular_buff.h"
 
 // init circular buffor
-uint8_t CB_init(circular_buf *cbuff)
+uint8_t CB_init(circular_buff *cbuff)
 {
     cbuff->data = (uint8_t *)malloc(CB_MAX_LEN);
-    cbuff = malloc(sizeof(cirbuf_t));
+    cbuff = malloc(sizeof(cbuff));
     return cbuff->buffor;
 }
 
 // delete buffor
-void CB_free(circular_buf *cbuff)
+void CB_free(circular_buff *cbuff)
 {
     free(cbuff);
 }
 
 // checks if the buffer is full
-CB_state CB_buff_full(circular_buf *cbuff)
+CB_state CB_buff_full(circular_buff *cbuff)
 {
-    if (cbuff->new_len == MAX_LEN)
+    if (cbuff->new_len == CB_MAX_LEN)
         return buffor_full;
 
     else
@@ -25,7 +25,7 @@ CB_state CB_buff_full(circular_buf *cbuff)
 }
 
 // checks if the buffer is empty
-CB_state CB_buff_empty(circular_buf *cbuff)
+CB_state CB_buff_empty(circular_buff *cbuff)
 {
     if (cbuff->new_len == 0)
         return buffor_empty;
@@ -35,11 +35,11 @@ CB_state CB_buff_empty(circular_buf *cbuff)
 }
 
 //return -1 if read data not success
-uint8_t CB_read_data(circular_buf *cbuff)
+uint8_t CB_read_data(circular_buff *cbuff)
 {
     uint8_t r;
     // checks if the buffer is not empty
-    if (CB_buff_empty(cbuff) == buf_not_empty)
+    if (CB_buff_empty(cbuff) == buffor_not_empty)
     {
         // if tail is at last position
         if (cbuff->tail == ((cbuff->buffor) + (CB_MAX_LEN)) - 1)
@@ -68,7 +68,7 @@ uint8_t CB_read_data(circular_buf *cbuff)
 }
 
 //return 1 if add data success
-uint8_t CB_add_data(circular_buf *cbuff, uint8_t data)
+uint8_t CB_add_data(circular_buff *cbuff, uint8_t data)
 {
     // checks if buffer is not full
     if (CB_buff_full(cbuff) == buffor_not_full)
