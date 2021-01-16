@@ -3,7 +3,7 @@
 
 #include "MKL05Z4.h"
 
-#define CB_MAX_LEN 30
+#define CB_MAX_LEN 50
 
 typedef struct circular_buff
 {
@@ -22,7 +22,7 @@ typedef enum
     buffor_not_empty
 } CB_state;
 
-uint8_t CB_init(circular_buff *cbuff);
+uint8_t *CB_init(circular_buff *cbuff);
 void CB_free(circular_buff *cbuff);
 CB_state CB_buff_full(circular_buff *cbuff);
 CB_state CB_buff_empty(circular_buff *cbuff);

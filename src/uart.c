@@ -3,6 +3,8 @@
 
 circular_buff tx_buffor, rx_buffor;
 
+volatile uint8_t data;
+
 void UART0_Init(void)
 {
     uint16_t baud_div;
@@ -10,6 +12,18 @@ void UART0_Init(void)
     SIM->SCGC4 |= SIM_SCGC4_UART0_MASK;  //turn on clock
     SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;  //turn on clock
     SIM->SOPT2 |= SIM_SOPT2_UART0SRC(1); // system clock source to uart
+
+    tx_buffor.buffor = CB_init(&tx_buffor);
+    tx_buffor.head = tx_buffor.data;
+    tx_buffor.tail = tx_buffor.data;
+    tx_buffor.buffor = tx_buffor.data;
+    tx_buffor.new_len = 0;
+
+    rx_buffor.buffor = CB_init(&rx_buffor);
+    rx_buffor.head = rx_buffor.data;
+    rx_buffor.tail = rx_buffor.data;
+    rx_buffor.buffor = rx_buffor.data;
+    rx_buffor.new_len = 0;
 
     //disable UART
     UART0->C2 &= ~(UART0_C2_TE_MASK | UART0_C2_RE_MASK);
@@ -41,8 +55,43 @@ void UART0_Init(void)
 
 void UART0_IRQHandler()
 {
-    if (UART0->S1 & UART0_S1_RDRF_MASK)
+    CB_state buffor_state = CB_buff_empty(&tx_buffor);
+
+    // if TRDE flag is set and buffor not empty
+    if ((UART0->S1 & UART0_S1_TDRE_MASK) && buffor_state == buffor_not_empty)
     {
-        LCD1602_PrintXY("bluetooth", 0, 0);
+        UART0->D = CB_read_data(&tx_buffor);
     }
+    // else if buffor is empty
+    else if (buffor_state == buffor_empty)
+    {
+        UART0->C2 &= ~UART0_C2_TIE_MASK;
+    }
+
+    buffor_state = CB_buff_full(&rx_buffor);
+
+    // if RDRF flag is set and buffor not full
+    if ((UART0->S1 & UART0_S1_RDRF_MASK) && buffor_state == buffor_not_full)
+    {
+        data = UART0->D;
+        CB_add_data(&rx_buffor, data);
+    }
+
+    // else if buffor is empty
+    else if (buffor_state == buffor_empty)
+    {
+        // disable rx interrupt
+        UART0->C2 &= ~UART0_C2_RIE_MASK;
+    }
+}
+
+void uart_log(uint8_t *c)
+{
+    uint32_t i = 0;
+    while (*(c + i) != '\0')
+    {
+        CB_add_data(&tx_buffor, *(c + i)); // Reads the string till \0 and adds that data to the transmit buffer
+        i++;
+    }
+    UART0->C2 |= UART0_C2_TIE_MASK; //Enable the tx interrupt when there is data in tx buffer
 }

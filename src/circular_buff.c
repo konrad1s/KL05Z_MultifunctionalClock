@@ -1,10 +1,14 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
 #include "../inc/circular_buff.h"
 
 // init circular buffor
-uint8_t CB_init(circular_buff *cbuff)
+uint8_t *CB_init(circular_buff *cbuff)
 {
-    cbuff->data = (uint8_t *)malloc(CB_MAX_LEN);
-    cbuff = malloc(sizeof(cbuff));
+	  cbuff->data = (uint8_t *)malloc(CB_MAX_LEN);
+		cbuff = malloc(sizeof(circular_buff));
+
     return cbuff->buffor;
 }
 

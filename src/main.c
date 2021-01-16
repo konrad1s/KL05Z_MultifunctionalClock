@@ -18,14 +18,15 @@ void Init_all();
 int main(void)
 {
   Init_all();
-
   LCD1602_PrintXY("Time:\0", 0, 1);
-
+	
+	uint8_t tx_str[10]="test\0";
+	uart_log((uint8_t*)tx_str);
+	
   while (1)
   {
     chooseModeRTC();
     chooseMode();
-
     __wfi(); // save energy and wait for interrupt
   }
 }
