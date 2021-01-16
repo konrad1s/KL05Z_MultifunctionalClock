@@ -2,10 +2,17 @@
 #ifndef mode_h
 #define mode_h
 
+#define TEMPERATURE_COMMAND "TEMPERATURE"
+
+#define RX_STR_SIZE 30
+#define TX_STR_SIZE 30
+
 extern uint8_t mode;
 extern uint8_t RTC_mode;
 
 void chooseMode();
+
+void uartMode();
 void calculatorMode();
 void temperatureMode();
 

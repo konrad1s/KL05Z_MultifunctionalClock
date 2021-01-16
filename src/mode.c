@@ -5,10 +5,13 @@
 #include "../inc/lcd1602.h"
 #include "../inc/rtc.h"
 #include "../inc/buttons.h"
+#include "../inc/uart.h"
 
 uint8_t mode = 0;
 uint8_t RTC_mode = 0;
 uint8_t prev_mode = 0;
+
+float temperature_result = 0;
 
 void chooseMode()
 {
@@ -29,6 +32,48 @@ void chooseMode()
   }
 }
 
+void uartMode()
+{
+	static char rx_str[RX_STR_SIZE]="\0";
+	static uint8_t i=0;
+	uint8_t tx_str[TX_STR_SIZE]="\0";
+  {
+    // check rx buffor
+    if (CB_buff_empty(&rx_buffor) == buffor_not_empty)
+    {
+      // read data
+      uint8_t data = CB_read_data(&rx_buffor);
+
+      if (data!='\r') 
+      {
+				rx_str[i]=data;
+        i++;
+      }
+			
+			// if \r is read
+			else 
+			{
+				if(strcmp (rx_str,TEMPERATURE_COMMAND)==0)
+				{
+					temperatureMode();
+					snprintf(tx_str, TX_STR_SIZE, "Temperature=%0.1f%cC \r\n", temperature_result, 0xBA);
+					uart_send((uint8_t*)tx_str);
+					memset(rx_str,0,RX_STR_SIZE * sizeof(uint8_t));
+					i=0;
+				}
+					else
+			{
+					snprintf(tx_str, TX_STR_SIZE, "Bad comment \r\n");
+					uart_send((uint8_t*)tx_str);
+					memset(rx_str,0,RX_STR_SIZE * sizeof(uint8_t));
+					i=0;
+			}
+			}
+		
+    }
+  }
+}
+
 void calculatorMode()
 {
   if (irqPIT)
@@ -41,14 +86,13 @@ void temperatureMode()
 {
   char buff[20] = "\0";
   float adc_volt_coeff = ((float)(((float)2.91) / 4095));
-  float result = 0;
   float Ut25 = 0.716;
   float m = 0.00162;
 
   if (irqPIT2)
   {
-    result = 25.0 - (((DMAvalue[0] & 0xFFFF) * adc_volt_coeff) - Ut25) / m;
-    snprintf(buff, 20, "T=%0.1f%cC   ", result, 0xDF);
+    temperature_result = 25.0 - (((DMAvalue[0] & 0xFFFF) * adc_volt_coeff) - Ut25) / m;
+    snprintf(buff, 20, "T=%0.1f%cC   ", temperature_result, 0xDF);
     LCD1602_PrintXY(buff, 0, 0);
     irqPIT2 = 0;
   }

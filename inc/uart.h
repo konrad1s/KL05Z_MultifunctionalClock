@@ -7,8 +7,8 @@
 #define BAUDRATE 9600
 #define DEFAULT_SYSTEM_CLOCK 41943040u
 
-void UART0_Init(void);
-void uart_log(uint8_t *c);
+void UART0_init(void);
+void uart_send(uint8_t *text);
 
 extern circular_buff tx_buffor, rx_buffor;
 

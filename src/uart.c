@@ -5,7 +5,7 @@ circular_buff tx_buffor, rx_buffor;
 
 volatile uint8_t data;
 
-void UART0_Init(void)
+void UART0_init(void)
 {
     uint16_t baud_div;
 
@@ -13,7 +13,8 @@ void UART0_Init(void)
     SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK;  //turn on clock
     SIM->SOPT2 |= SIM_SOPT2_UART0SRC(1); // system clock source to uart
 
-    tx_buffor.buffor = CB_init(&tx_buffor);
+    //init buffors
+	  tx_buffor.buffor = CB_init(&tx_buffor);
     tx_buffor.head = tx_buffor.data;
     tx_buffor.tail = tx_buffor.data;
     tx_buffor.buffor = tx_buffor.data;
@@ -85,13 +86,15 @@ void UART0_IRQHandler()
     }
 }
 
-void uart_log(uint8_t *c)
+void uart_send(uint8_t *text)
 {
-    uint32_t i = 0;
-    while (*(c + i) != '\0')
+    uint8_t i = 0;
+    while (*(text + i) != '\0')
     {
-        CB_add_data(&tx_buffor, *(c + i)); // Reads the string till \0 and adds that data to the transmit buffer
+        // add string to buffer
+        CB_add_data(&tx_buffor, *(text + i));
         i++;
     }
-    UART0->C2 |= UART0_C2_TIE_MASK; //Enable the tx interrupt when there is data in tx buffer
+    // enable the tx interrupt
+    UART0->C2 |= UART0_C2_TIE_MASK;
 }

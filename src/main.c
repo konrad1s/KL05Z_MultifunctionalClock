@@ -20,13 +20,11 @@ int main(void)
   Init_all();
   LCD1602_PrintXY("Time:\0", 0, 1);
 	
-	uint8_t tx_str[10]="test\0";
-	uart_log((uint8_t*)tx_str);
-	
   while (1)
   {
     chooseModeRTC();
     chooseMode();
+		uartMode();
     __wfi(); // save energy and wait for interrupt
   }
 }
@@ -41,5 +39,5 @@ void Init_all()
   BUTTOONS_init(); // initialize buttons
   ADC_init();      // initialize ADC
   DMA_init();      // initialize DMA
-	UART0_Init();
+	UART0_init(); 	 // initialize USART
 }
