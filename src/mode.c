@@ -56,6 +56,7 @@ void uartMode()
 				if(strcmp (rx_str,TEMPERATURE_COMMAND)==0)
 				{
 					temperatureMode();
+					mode=1;
 					snprintf(tx_str, TX_STR_SIZE, "Temperature=%0.1f%cC \r\n", temperature_result, 0xBA);
 					uart_send((uint8_t*)tx_str);
 					memset(rx_str,0,RX_STR_SIZE * sizeof(uint8_t));

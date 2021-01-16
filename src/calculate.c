@@ -74,6 +74,7 @@ void Calc(char *str, char *separator, bool sign_equal)
 {
     expression_check = 1;
     char buffor[20] = {"\0"};
+		char endl[]={"\r\n"};
 
     float result;
 
@@ -113,7 +114,12 @@ void Calc(char *str, char *separator, bool sign_equal)
         expression_check = 2;
     }
     else
-        LCD1602_PrintXY(buffor, lcd_position, 0);
+		{
+			LCD1602_PrintXY(buffor, lcd_position, 0);
+			uart_send((uint8_t*)expression);
+			uart_send((uint8_t*)buffor);
+			uart_send((uint8_t*)endl);
+		}
 }
 
 ///////////////////////////////////////////////////////////
