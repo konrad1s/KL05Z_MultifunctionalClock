@@ -1,8 +1,8 @@
 #ifndef buttons_h
 #define buttons_h
 
-#define BUT1 7
-#define BUT2 0
+#define BUT1 0
+#define BUT2 7
 #define BUT3 6
 
 extern uint8_t but3;

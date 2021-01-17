@@ -13,6 +13,6 @@ D = "/"
 * = "C"
 ```
 
-<img src="Pics/schematic.png" />
+<img src="photos/schematic.png" />
 
 
