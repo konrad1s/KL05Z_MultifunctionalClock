@@ -9,12 +9,6 @@ uint8_t irqRTC = 1;
 uint32_t rtc_seconds_counter = 0;
 uint32_t rtc_hours = 0, rtc_minutes = 0, rtc_seconds = 0;
 
-void RTC_Seconds_IRQHandler(void)
-{
-  rtc_seconds_counter++;
-  irqRTC = 1;
-}
-
 void RTC_init(void)
 {
   int i;
@@ -37,6 +31,9 @@ void RTC_init(void)
 
   //enable time seconds interrupt
   RTC->IER |= RTC_IER_TSIE_MASK;
+	
+	//enable alarm interrupt
+	RTC->IER |= RTC_IER_TAIE_MASK;
 
   //set value
   RTC->TSR = 1;
@@ -52,6 +49,10 @@ void RTC_init(void)
   //enable RTC seconds interrupt
   NVIC_ClearPendingIRQ(RTC_Seconds_IRQn);
   NVIC_EnableIRQ(RTC_Seconds_IRQn);
+	
+	//enable RTC alarm interrupt
+	NVIC_ClearPendingIRQ(RTC_IRQn);
+	NVIC_EnableIRQ(RTC_IRQn);
 }
 
 void display_time(void)
@@ -64,4 +65,15 @@ void display_time(void)
   rtc_hours %= 24;
   sprintf(time_print, "%2i:%02i:%02i  \0", rtc_hours, rtc_minutes, rtc_seconds);
   LCD1602_PrintXY(time_print, 6, 1);
+}
+
+void RTC_Seconds_IRQHandler(void)
+{
+  rtc_seconds_counter++;
+  irqRTC = 1;
+}
+
+void RTC_IRQHandler (void)
+{
+	
 }
