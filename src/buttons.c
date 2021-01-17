@@ -9,10 +9,9 @@ void PORTB_IRQHandler(void)
 {
   if (PORTB->ISFR & (1 << BUT1))
   {
-    if (mode == 1)
-      mode = 0;
-    else
-      mode = 1;
+      mode++;
+		if(mode>2)
+			mode=0;
 
     while ((FPTB->PDIR & (1 << BUT1)) == 0)
       ;                                    //wait for button release

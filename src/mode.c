@@ -23,6 +23,8 @@ void chooseMode()
   case 1:
     temperatureMode();
     break;
+	case 2:
+    break;
   }
   if (prev_mode != mode)
   {
@@ -44,13 +46,13 @@ void uartMode()
       // read data
       uint8_t data = CB_read_data(&rx_buffor);
 
-      if (data!='\r') 
+      if (data!=0x0A) 
       {
 				rx_str[i]=data;
         i++;
       }
 			
-			// if \r is read
+			// if \n is read
 			else 
 			{
 				if(strcmp (rx_str,TEMPERATURE_COMMAND)==0)
@@ -64,8 +66,12 @@ void uartMode()
 				}
 					else
 			{
-					snprintf(tx_str, TX_STR_SIZE, "Bad comment \r\n");
-					uart_send((uint8_t*)tx_str);
+				if(mode==2)
+				{
+					snprintf(tx_str, TX_STR_SIZE, "%s",rx_str);
+					LCD1602_ClearRow(0);
+					LCD1602_PrintXY(tx_str,0,0);
+				}
 					memset(rx_str,0,RX_STR_SIZE * sizeof(uint8_t));
 					i=0;
 			}

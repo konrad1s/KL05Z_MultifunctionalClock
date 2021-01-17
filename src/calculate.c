@@ -116,6 +116,7 @@ void Calc(char *str, char *separator, bool sign_equal)
     else
 		{
 			LCD1602_PrintXY(buffor, lcd_position, 0);
+			// if there was '=' send data to uart
 			uart_send((uint8_t*)expression);
 			uart_send((uint8_t*)buffor);
 			uart_send((uint8_t*)endl);
