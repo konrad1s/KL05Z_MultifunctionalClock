@@ -9,6 +9,7 @@
 #include "../inc/adc.h"
 #include "../inc/uart.h"
 #include "../inc/mode.h"
+#include "../inc//led.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -34,6 +35,7 @@ void Init_all()
   LCD1602_Init(); // initialize LCD
   LCD1602_Backlight(TRUE);
   KB_init();       // initialize Keyboard
+	LEDs_init();		 // // initialize LEDs
   PIT_init();      // initialize PIT
   RTC_init();      // initialize RTC
   BUTTOONS_init(); // initialize buttons

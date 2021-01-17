@@ -6,6 +6,7 @@
 #include "../inc/rtc.h"
 #include "../inc/buttons.h"
 #include "../inc/uart.h"
+#include "../inc/led.h"
 
 uint8_t mode = 0;
 uint8_t RTC_mode = 0;
@@ -30,6 +31,8 @@ void chooseMode()
   {
     LCD1602_ClearRow(0);
     CalculatorReset();
+		LEDs_off();
+		ledModeOn();
     prev_mode = mode;
   }
 }
@@ -131,6 +134,16 @@ void chooseModeRTC()
     RTC_mode = 0;
     break;
   }
+}
+
+void ledModeOn()
+{
+	if(mode==0)
+				LED_on(RED_LED);
+		else if(mode==1)
+					LED_on(GREEN_LED);
+			else if(mode==2)
+						LED_on(BLUE_LED);
 }
 
 void defaultRTCMode()

@@ -17,6 +17,7 @@ void calculatorMode();
 void temperatureMode();
 
 void chooseModeRTC();
+void ledModeOn();
 
 void defaultRTCMode();
 void setHours();
