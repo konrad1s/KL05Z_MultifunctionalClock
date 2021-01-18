@@ -1,3 +1,9 @@
+/**
+ * @file led.h
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #ifndef led_h
 #define led_h
 

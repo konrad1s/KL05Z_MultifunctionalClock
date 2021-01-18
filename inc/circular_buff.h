@@ -1,3 +1,9 @@
+/**
+ * @file circular_buff.h
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #ifndef circular_buff_h
 #define circular_buff_h
 

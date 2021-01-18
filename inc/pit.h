@@ -1,3 +1,9 @@
+/**
+ * @file pit.h
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #ifndef pit_h
 #define pit_h
 

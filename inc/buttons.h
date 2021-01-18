@@ -1,3 +1,9 @@
+/**
+ * @file buttons.h
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #ifndef buttons_h
 #define buttons_h
 

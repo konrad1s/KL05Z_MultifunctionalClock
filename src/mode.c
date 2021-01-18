@@ -1,3 +1,9 @@
+/**
+ * @file mode.c
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #include "MKL05Z4.h"
 #include "../inc/mode.h"
 #include "../inc/pit.h"

@@ -1,3 +1,9 @@
+/**
+ * @file keyboard.h
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #ifndef keyboard_h
 #define keyboard_h
 

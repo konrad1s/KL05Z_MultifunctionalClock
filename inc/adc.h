@@ -1,3 +1,9 @@
+/**
+ * @file adc.h
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #include "MKL05Z4.h"
 
 #ifndef adc_h

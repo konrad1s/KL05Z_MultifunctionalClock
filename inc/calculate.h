@@ -1,3 +1,9 @@
+/**
+ * @file calculate.h
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #ifndef calculate_h
 #define calculate_h
 

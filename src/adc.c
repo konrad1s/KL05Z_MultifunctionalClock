@@ -1,3 +1,9 @@
+/**
+ * @file adc.c
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #include "../inc/adc.h"
 
 void ADC_init()

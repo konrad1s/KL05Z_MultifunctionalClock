@@ -1,3 +1,9 @@
+/**
+ * @file calculate.c
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #include "MKL05Z4.h"
 #include "../inc/calculate.h"
 #include "../inc/keyboard.h"

@@ -1,3 +1,9 @@
+/**
+ * @file rtc.h
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #include "MKL05Z4.h"
 #ifndef rtc_h
 #define rtc_h

@@ -1,3 +1,9 @@
+/**
+ * @file mode.h
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #include "MKL05Z4.h"
 #ifndef mode_h
 #define mode_h

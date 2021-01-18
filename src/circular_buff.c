@@ -1,3 +1,9 @@
+/**
+ * @file circular_buff.c
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>

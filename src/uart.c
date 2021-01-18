@@ -1,3 +1,9 @@
+/**
+ * @file uart.c
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #include "../inc/uart.h"
 #include "../inc/lcd1602.h"
 

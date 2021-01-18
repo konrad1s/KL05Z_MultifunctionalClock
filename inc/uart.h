@@ -1,5 +1,11 @@
-#ifndef UART_H
-#define UART_H
+/**
+ * @file uart.h
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
+#ifndef uart_h
+#define uart_h
 
 #include "MKL05Z4.h"
 #include "../inc/circular_buff.h"

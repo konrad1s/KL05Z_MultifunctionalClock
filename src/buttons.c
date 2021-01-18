@@ -1,3 +1,9 @@
+/**
+ * @file buttons.c
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #include "MKL05Z4.h"
 #include "../inc/buttons.h"
 #include "../inc/rtc.h"

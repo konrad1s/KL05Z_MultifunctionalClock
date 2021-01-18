@@ -1,3 +1,9 @@
+/**
+ * @file rtc.c
+ * @author Konrad Sikora
+ * @date Jan 2021
+ */
+
 #include "../inc/rtc.h"
 #include "../inc/lcd1602.h"
 #include "../inc/uart.h"
