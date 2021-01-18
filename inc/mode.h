@@ -16,21 +16,16 @@
 extern uint8_t mode;
 extern uint8_t mode_rtc;
 
-void chooseMode();
+void choose_mode();
 
-void uartMode();
-void calculatorMode();
-void temperatureMode();
+void uart_mode();
+void calculator_mode();
+void temperature_mode();
 
-void chooseModeRTC();
-void ledModeOn();
+void RTC_choose_mode();
+void RTC_alarm_mode();
+void RTC_default_mode();
 
-void defaultRTCMode();
-void setHours();
-void setMinutes();
-void setSeconds();
-void setHoursAlarm();
-void setMinutesAlarm();
-void setSecondsAlarm();
+void LED_on_mode();
 
 #endif

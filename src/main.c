@@ -29,10 +29,10 @@ int main(void)
 
   while (1)
   {
-    chooseModeRTC();
-    chooseMode();
-    uartMode();
-    alarmModeRTC();
+    RTC_choose_mode();
+    choose_mode();
+    uart_mode();
+    RTC_alarm_mode();
     __wfi(); // save energy and wait for interrupt
   }
 }

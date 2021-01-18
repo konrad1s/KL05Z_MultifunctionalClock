@@ -20,15 +20,15 @@ uint8_t prev_mode = 0;
 
 float temperature_result = 0;
 
-void chooseMode()
+void choose_mode()
 {
   switch (mode)
   {
   case 0:
-    calculatorMode();
+    calculator_mode();
     break;
   case 1:
-    temperatureMode();
+    temperature_mode();
     break;
   case 2:
     break;
@@ -38,12 +38,12 @@ void chooseMode()
     LCD1602_ClearRow(0);
     Calculator_reset();
     LEDs_off();
-    ledModeOn();
+    LED_on_mode();
     prev_mode = mode;
   }
 }
 
-void uartMode()
+void uart_mode()
 {
   static char rx_str[RX_STR_SIZE] = "\0";
   static uint8_t i = 0;
@@ -66,7 +66,7 @@ void uartMode()
       {
         if (strcmp(rx_str, TEMPERATURE_COMMAND) == 0)
         {
-          temperatureMode();
+          temperature_mode();
           mode = 1;
           snprintf(tx_str, TX_STR_SIZE, "Temperature=%0.1f%cC \r\n", temperature_result, 0xBA);
           UART0_send((uint8_t *)tx_str);
@@ -89,7 +89,7 @@ void uartMode()
   }
 }
 
-void calculatorMode()
+void calculator_mode()
 {
   if (pit_irq)
   {
@@ -98,7 +98,7 @@ void calculatorMode()
   }
 }
 
-void temperatureMode()
+void temperature_mode()
 {
   char buff[20] = "\0";
   float adc_volt_coeff = ((float)(((float)2.91) / 4095));
@@ -114,37 +114,37 @@ void temperatureMode()
   }
 }
 
-void chooseModeRTC()
+void RTC_choose_mode()
 {
   switch (mode_rtc)
   {
   case 0:
-    defaultRTCMode();
+    RTC_default_mode();
     break;
   case 1:
     LCD1602_Blink_On();
     LCD1602_SetCursor(7, 1);
-    setHours();
+    RTC_set_hours();
     break;
   case 2:
     LCD1602_SetCursor(10, 1);
-    setMinutes();
+    RTC_set_minutes();
     break;
   case 3:
     LCD1602_SetCursor(13, 1);
-    setSeconds();
+    RTC_set_seconds();
     break;
   case 4:
     LCD1602_SetCursor(7, 1);
-    setHoursAlarm();
+    RTC_alarm_set_hours();
     break;
   case 5:
     LCD1602_SetCursor(10, 1);
-    setMinutesAlarm();
+    RTC_alarm_set_minutes();
     break;
   case 6:
     LCD1602_SetCursor(13, 1);
-    setSecondsAlarm();
+    RTC_alarm_set_seconds();
     break;
   default:
     RTC_save();
@@ -156,7 +156,7 @@ void chooseModeRTC()
   }
 }
 
-void alarmModeRTC()
+void RTC_alarm_mode()
 {
   static uint8_t rtc_alarm_prev = 0;
 
@@ -171,24 +171,14 @@ void alarmModeRTC()
   else if (rtc_alarm_irq == 0 && rtc_alarm_prev)
   {
     buzzer_off();
-    UART0_send("Alarm has been cleared ");
+    UART0_send("Alarm has been cleared. ");
     RTC_time_uart_send();
     rtc_alarm_prev = 0;
     rtc_alarm_irq = 2;
   }
 }
 
-void ledModeOn()
-{
-  if (mode == 0)
-    LED_on(RED_LED);
-  else if (mode == 1)
-    LED_on(GREEN_LED);
-  else if (mode == 2)
-    LED_on(BLUE_LED);
-}
-
-void defaultRTCMode()
+void RTC_default_mode()
 {
   if (rtc_irq)
   {
@@ -198,69 +188,12 @@ void defaultRTCMode()
   }
 }
 
-void setHours()
+void LED_on_mode()
 {
-  if (but3_irq)
-  {
-    RTC->SR &= ~RTC_SR_TCE_MASK; //disable RTC
-    rtc_seconds_counter += 3600;
-    RTC_display_time();
-    LCD1602_SetCursor(7, 1);
-    but3_irq = 0;
-  }
-}
-
-void setMinutes()
-{
-  if (but3_irq)
-  {
-    rtc_seconds_counter += 60;
-    RTC_display_time();
-    LCD1602_SetCursor(10, 1);
-    but3_irq = 0;
-  }
-}
-
-void setSeconds()
-{
-  if (but3_irq)
-  {
-    rtc_seconds_counter++;
-    RTC_display_time();
-    LCD1602_SetCursor(13, 1);
-    but3_irq = 0;
-  }
-}
-
-void setHoursAlarm()
-{
-  if (but3_irq)
-  {
-    rtc_seconds_alarm_counter += 3600;
-    RTC_display_alarm();
-    LCD1602_SetCursor(7, 1);
-    but3_irq = 0;
-  }
-}
-
-void setMinutesAlarm()
-{
-  if (but3_irq)
-  {
-    rtc_seconds_alarm_counter += 60;
-    RTC_display_alarm();
-    LCD1602_SetCursor(10, 1);
-    but3_irq = 0;
-  }
-}
-
-void setSecondsAlarm()
-{
-  if (but3_irq)
-  {
-    rtc_seconds_alarm_counter++;
-    RTC_display_alarm();
-    LCD1602_SetCursor(13, 1);
-    but3_irq = 0;
-  }
+  if (mode == 0)
+    LED_on(RED_LED);
+  else if (mode == 1)
+    LED_on(GREEN_LED);
+  else if (mode == 2)
+    LED_on(BLUE_LED);
 }
