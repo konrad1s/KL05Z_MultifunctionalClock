@@ -27,5 +27,4 @@ void setHoursAlarm();
 void setMinutesAlarm();
 void setSecondsAlarm();
 
-
 #endif

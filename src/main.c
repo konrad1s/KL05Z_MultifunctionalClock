@@ -20,13 +20,13 @@ int main(void)
 {
   Init_all();
   LCD1602_PrintXY("Time:\0", 0, 1);
-	
+
   while (1)
   {
     chooseModeRTC();
     chooseMode();
-		uartMode();
-		alarmModeRTC();
+    uartMode();
+    alarmModeRTC();
     __wfi(); // save energy and wait for interrupt
   }
 }
@@ -36,11 +36,11 @@ void Init_all()
   LCD1602_Init(); // initialize LCD
   LCD1602_Backlight(TRUE);
   KB_init();       // initialize Keyboard
-	LEDs_init();		 // // initialize LEDs
+  LEDs_init();     // // initialize LEDs
   PIT_init();      // initialize PIT
   RTC_init();      // initialize RTC
   BUTTOONS_init(); // initialize buttons
   ADC_init();      // initialize ADC
   DMA_init();      // initialize DMA
-	UART0_init(); 	 // initialize USART
+  UART0_init();    // initialize USART
 }

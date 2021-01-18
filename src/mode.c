@@ -143,6 +143,7 @@ void chooseModeRTC()
     RTC_save();
     RTC->SR |= RTC_SR_TCE_MASK; //enable RTC
     LCD1602_Blink_Off();
+    alarm_uart_send();
     RTC_mode = 0;
     break;
   }
@@ -150,11 +151,24 @@ void chooseModeRTC()
 
 void alarmModeRTC()
 {
-	if (alarmRTC)
-	{
-		//TODO BUZZER
-	//	uart_send("ALARM");
-	}
+  static uint8_t alarm_prev = 0;
+
+  if (alarmRTC == 1)
+  {
+    buzzer_on();
+    uart_send("ALARM\r\n");
+    alarm_prev = 1;
+    alarmRTC = 2;
+  }
+
+  else if (alarmRTC == 0 && alarm_prev)
+  {
+    buzzer_off();
+    uart_send("Alarm has been cleared ");
+    rtc_uart_send();
+    alarm_prev = 0;
+    alarmRTC = 2;
+  }
 }
 
 void ledModeOn()

@@ -6,8 +6,8 @@
 // init circular buffor
 uint8_t *CB_init(circular_buff *cbuff)
 {
-	  cbuff->data = (uint8_t *)malloc(CB_MAX_LEN);
-		cbuff = malloc(sizeof(circular_buff));
+    cbuff->data = (uint8_t *)malloc(CB_MAX_LEN);
+    cbuff = malloc(sizeof(circular_buff));
 
     return cbuff->buffor;
 }

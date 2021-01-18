@@ -14,7 +14,7 @@ void UART0_init(void)
     SIM->SOPT2 |= SIM_SOPT2_UART0SRC(1); // system clock source to uart
 
     //init buffors
-	  tx_buffor.buffor = CB_init(&tx_buffor);
+    tx_buffor.buffor = CB_init(&tx_buffor);
     tx_buffor.head = tx_buffor.data;
     tx_buffor.tail = tx_buffor.data;
     tx_buffor.buffor = tx_buffor.data;
