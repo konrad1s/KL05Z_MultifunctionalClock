@@ -5,6 +5,7 @@
 #include <stdlib.h>
 
 uint8_t irqRTC = 1;
+uint8_t alarmRTC = 0;
 
 uint32_t rtc_seconds_counter = 0;
 uint32_t rtc_hours = 0, rtc_minutes = 0, rtc_seconds = 0;
@@ -109,8 +110,7 @@ void RTC_IRQHandler (void)
 	//if RTC alarm flag is set
 	if(RTC->SR & RTC_SR_TAF_MASK)
 	{
-		
-		uart_send("test");
+		alarmRTC=1;
 		//disable alarm, write new value 
 		RTC->TAR = RTC->TAR;
 	}

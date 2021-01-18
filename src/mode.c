@@ -24,24 +24,24 @@ void chooseMode()
   case 1:
     temperatureMode();
     break;
-	case 2:
+  case 2:
     break;
   }
   if (prev_mode != mode)
   {
     LCD1602_ClearRow(0);
     CalculatorReset();
-		LEDs_off();
-		ledModeOn();
+    LEDs_off();
+    ledModeOn();
     prev_mode = mode;
   }
 }
 
 void uartMode()
 {
-	static char rx_str[RX_STR_SIZE]="\0";
-	static uint8_t i=0;
-	uint8_t tx_str[TX_STR_SIZE]="\0";
+  static char rx_str[RX_STR_SIZE] = "\0";
+  static uint8_t i = 0;
+  uint8_t tx_str[TX_STR_SIZE] = "\0";
   {
     // check rx buffor
     if (CB_buff_empty(&rx_buffor) == buffor_not_empty)
@@ -49,37 +49,36 @@ void uartMode()
       // read data
       uint8_t data = CB_read_data(&rx_buffor);
 
-      if (data!=0x0A) 
+      if (data != 0x0A)
       {
-				rx_str[i]=data;
+        rx_str[i] = data;
         i++;
       }
-			
-			// if \n is read
-			else 
-			{
-				if(strcmp (rx_str,TEMPERATURE_COMMAND)==0)
-				{
-					temperatureMode();
-					mode=1;
-					snprintf(tx_str, TX_STR_SIZE, "Temperature=%0.1f%cC \r\n", temperature_result, 0xBA);
-					uart_send((uint8_t*)tx_str);
-					memset(rx_str,0,RX_STR_SIZE * sizeof(uint8_t));
-					i=0;
-				}
-					else
-			{
-				if(mode==2)
-				{
-					snprintf(tx_str, TX_STR_SIZE, "%s",rx_str);
-					LCD1602_ClearRow(0);
-					LCD1602_PrintXY(tx_str,0,0);
-				}
-					memset(rx_str,0,RX_STR_SIZE * sizeof(uint8_t));
-					i=0;
-			}
-			}
-		
+
+      // if \n is read
+      else
+      {
+        if (strcmp(rx_str, TEMPERATURE_COMMAND) == 0)
+        {
+          temperatureMode();
+          mode = 1;
+          snprintf(tx_str, TX_STR_SIZE, "Temperature=%0.1f%cC \r\n", temperature_result, 0xBA);
+          uart_send((uint8_t *)tx_str);
+          memset(rx_str, 0, RX_STR_SIZE * sizeof(uint8_t));
+          i = 0;
+        }
+        else
+        {
+          if (mode == 2)
+          {
+            snprintf(tx_str, TX_STR_SIZE, "%s", rx_str);
+            LCD1602_ClearRow(0);
+            LCD1602_PrintXY(tx_str, 0, 0);
+          }
+          memset(rx_str, 0, RX_STR_SIZE * sizeof(uint8_t));
+          i = 0;
+        }
+      }
     }
   }
 }
@@ -128,8 +127,7 @@ void chooseModeRTC()
     LCD1602_SetCursor(13, 1);
     setSeconds();
     break;
-	  case 4:
-    LCD1602_Blink_On();
+  case 4:
     LCD1602_SetCursor(7, 1);
     setHoursAlarm();
     break;
@@ -142,7 +140,7 @@ void chooseModeRTC()
     setSecondsAlarm();
     break;
   default:
-		RTC_save();
+    RTC_save();
     RTC->SR |= RTC_SR_TCE_MASK; //enable RTC
     LCD1602_Blink_Off();
     RTC_mode = 0;
@@ -150,21 +148,29 @@ void chooseModeRTC()
   }
 }
 
+void alarmModeRTC()
+{
+	if (alarmRTC)
+	{
+		//TODO BUZZER
+	//	uart_send("ALARM");
+	}
+}
+
 void ledModeOn()
 {
-	if(mode==0)
-				LED_on(RED_LED);
-		else if(mode==1)
-					LED_on(GREEN_LED);
-			else if(mode==2)
-						LED_on(BLUE_LED);
+  if (mode == 0)
+    LED_on(RED_LED);
+  else if (mode == 1)
+    LED_on(GREEN_LED);
+  else if (mode == 2)
+    LED_on(BLUE_LED);
 }
 
 void defaultRTCMode()
 {
   if (irqRTC)
   {
-
     display_time();
     but3 = 0;
     irqRTC = 0;

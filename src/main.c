@@ -26,6 +26,7 @@ int main(void)
     chooseModeRTC();
     chooseMode();
 		uartMode();
+		alarmModeRTC();
     __wfi(); // save energy and wait for interrupt
   }
 }

@@ -32,6 +32,8 @@ void PORTB_IRQHandler(void)
   if (PORTB->ISFR & (1 << BUT3))
   {
     but3 = 1;
+		//if alarm, disable
+		alarmRTC=0;
     while ((FPTB->PDIR & (1 << BUT3)) == 0)
       ;                                    //wait for button release
     PORTB->PCR[BUT3] |= PORT_PCR_ISF_MASK; //clear interrupt

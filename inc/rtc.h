@@ -3,6 +3,7 @@
 #define rtc_h
 
 extern uint8_t irqRTC;
+extern uint8_t alarmRTC;
 
 extern uint32_t rtc_seconds_counter;
 extern uint32_t rtc_hours , rtc_minutes , rtc_seconds;
