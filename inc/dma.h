@@ -9,7 +9,7 @@
 #ifndef dma_h
 #define dma_h
 
-extern uint32_t DMAvalue[5];
+extern uint32_t DMA_value[5];
 
 void DMA_init();
 

@@ -14,7 +14,7 @@
 #define TX_STR_SIZE 30
 
 extern uint8_t mode;
-extern uint8_t RTC_mode;
+extern uint8_t mode_rtc;
 
 void chooseMode();
 

@@ -20,26 +20,41 @@ void LEDs_init()
     PTB->PSOR |= (1 << GREEN_LED) | (1 << BLUE_LED) | (1 << BUZZER);                  //turn LEDs off
 }
 
+/**
+ * @brief Turn all LEDs off
+ */
 void LEDs_off()
 {
     PTB->PSOR |= (1 << RED_LED) | (1 << GREEN_LED) | (1 << BLUE_LED);
 }
 
+/**
+ * @brief Turn LED on
+ */
 void LED_on(LED_Color color)
 {
     PTB->PCOR |= (1 << color);
 }
 
+/**
+ * @brief Toggle LED
+ */
 void LED_toggle(LED_Color color)
 {
     PTB->PTOR |= (1 << color);
 }
 
+/**
+ * @brief Turon buzzer on
+ */
 void buzzer_on(void)
 {
     PTB->PCOR |= (1 << BUZZER);
 }
 
+/**
+ * @brief Turn buzzer off
+ */
 void buzzer_off(void)
 {
     PTB->PSOR |= (1 << BUZZER);

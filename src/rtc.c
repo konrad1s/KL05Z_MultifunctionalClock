@@ -11,8 +11,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-uint8_t irqRTC = 1;
-uint8_t alarmRTC = 0;
+uint8_t rtc_irq = 1;
+uint8_t rtc_alarm_irq = 0;
 
 uint32_t rtc_seconds_counter = 0;
 uint32_t rtc_hours = 0, rtc_minutes = 0, rtc_seconds = 0;
@@ -66,7 +66,10 @@ void RTC_init(void)
   NVIC_EnableIRQ(RTC_IRQn);
 }
 
-void display_time(void)
+/**
+ * @brief Display time on LCD
+ */
+void RTC_display_time(void)
 {
   char time_print[20] = {"00:00:00"};
   rtc_seconds = rtc_seconds_counter % 60;
@@ -78,7 +81,10 @@ void display_time(void)
   LCD1602_PrintXY(time_print, 6, 1);
 }
 
-void display_alarm_time()
+/**
+ * @brief Display alarm time on LCD
+ */
+void RTC_display_alarm()
 {
   char time_print[20] = {"00:00:00"};
   rtc_alarm_seconds = rtc_seconds_alarm_counter % 60;
@@ -90,42 +96,54 @@ void display_alarm_time()
   LCD1602_PrintXY(time_print, 6, 1);
 }
 
+/**
+ * @brief Save values to RTC registers
+ */
 void RTC_save(void)
 {
   RTC->SR &= ~RTC_SR_TCE_MASK;
 
   //set rtc secounds counter
   rtc_seconds_counter = rtc_hours * 3600 + rtc_minutes * 60 + rtc_seconds;
+  //set rtc alarm secounds counter
   rtc_seconds_alarm_counter = rtc_alarm_hours * 3600 + rtc_alarm_minutes * 60 + rtc_alarm_seconds;
 
-  RTC->TSR = rtc_seconds_counter; //TSR++ when TSR>=32767
-
+  // set TSR value
+  RTC->TSR = rtc_seconds_counter;
+  // set TAR value
   RTC->TAR = rtc_seconds_alarm_counter;
 
   //enable RTC
   RTC->SR |= RTC_SR_TCE_MASK;
 }
 
-void alarm_uart_send(void)
+/**
+ * @brief Send alarm time to uart
+ */
+void RTC_alarm_uart_send(void)
 {
 
   uint8_t tx_str[50] = "\0";
   snprintf(tx_str, 50, "Alarm has been set: (hh:mm:ss) %2i:%02i:%02i\r\n", rtc_alarm_hours, rtc_alarm_minutes, rtc_alarm_seconds);
-  uart_send((uint8_t *)tx_str);
+  UART0_send((uint8_t *)tx_str);
 }
 
-void rtc_uart_send(void)
+/**
+ * @brief Send time to uart
+ */
+void RTC_time_uart_send(void)
 {
 
   uint8_t tx_str[50] = "\0";
   snprintf(tx_str, 50, "time: (hh:mm:ss) %2i:%02i:%02i\r\n", rtc_hours, rtc_minutes, rtc_seconds);
-  uart_send((uint8_t *)tx_str);
+  UART0_send((uint8_t *)tx_str);
 }
 
 void RTC_Seconds_IRQHandler(void)
 {
+  // increment sec counter
   rtc_seconds_counter++;
-  irqRTC = 1;
+  rtc_irq = 1;
 }
 
 void RTC_IRQHandler(void)
@@ -133,8 +151,8 @@ void RTC_IRQHandler(void)
   //if RTC alarm flag is set
   if (RTC->SR & RTC_SR_TAF_MASK)
   {
-    alarmRTC = 1;
-    //disable alarm, write new value
+    rtc_alarm_irq = 1;
+    //disable alarm interrupt, write new value
     RTC->TAR = RTC->TAR;
   }
 }

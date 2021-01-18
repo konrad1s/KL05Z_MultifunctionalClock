@@ -9,7 +9,7 @@
 #include "../inc/rtc.h"
 #include "../inc/mode.h"
 
-uint8_t but3 = 0;
+uint8_t but3_irq = 0;
 
 void PORTB_IRQHandler(void)
 {
@@ -26,10 +26,10 @@ void PORTB_IRQHandler(void)
 
   if (PORTB->ISFR & (1 << BUT2))
   {
-    if (RTC_mode < 7)
-      RTC_mode++;
+    if (mode_rtc < 7)
+      mode_rtc++;
     else
-      RTC_mode = 0;
+      mode_rtc = 0;
     while ((FPTB->PDIR & (1 << BUT2)) == 0)
       ;                                    //wait for button release
     PORTB->PCR[BUT2] |= PORT_PCR_ISF_MASK; //clear interrupt
@@ -37,11 +37,11 @@ void PORTB_IRQHandler(void)
 
   if (PORTB->ISFR & (1 << BUT3))
   {
-    but3 = 1;
+    but3_irq = 1;
 
     //if alarm, disable
-    if (alarmRTC)
-      alarmRTC = 0;
+    if (rtc_alarm_irq)
+      rtc_alarm_irq = 0;
     while ((FPTB->PDIR & (1 << BUT3)) == 0)
       ;                                    //wait for button release
     PORTB->PCR[BUT3] |= PORT_PCR_ISF_MASK; //clear interrupt

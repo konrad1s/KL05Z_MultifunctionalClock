@@ -60,6 +60,19 @@ void UART0_init(void)
     NVIC_ClearPendingIRQ(UART0_IRQn);
 }
 
+void UART0_send(uint8_t *text)
+{
+    uint8_t i = 0;
+    while (*(text + i) != '\0')
+    {
+        // add string to buffer
+        CB_add_data(&tx_buffor, *(text + i));
+        i++;
+    }
+    // enable the tx interrupt
+    UART0->C2 |= UART0_C2_TIE_MASK;
+}
+
 void UART0_IRQHandler()
 {
     CB_state buffor_state = CB_buff_empty(&tx_buffor);
@@ -90,17 +103,4 @@ void UART0_IRQHandler()
         // disable rx interrupt
         UART0->C2 &= ~UART0_C2_RIE_MASK;
     }
-}
-
-void uart_send(uint8_t *text)
-{
-    uint8_t i = 0;
-    while (*(text + i) != '\0')
-    {
-        // add string to buffer
-        CB_add_data(&tx_buffor, *(text + i));
-        i++;
-    }
-    // enable the tx interrupt
-    UART0->C2 |= UART0_C2_TIE_MASK;
 }

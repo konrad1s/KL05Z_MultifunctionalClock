@@ -9,7 +9,9 @@
 #include <stdint.h>
 #include "../inc/circular_buff.h"
 
-// init circular buffor
+/**
+ * @brief Init circular buffor
+ */
 uint8_t *CB_init(circular_buff *cbuff)
 {
     cbuff->data = (uint8_t *)malloc(CB_MAX_LEN);
@@ -18,13 +20,17 @@ uint8_t *CB_init(circular_buff *cbuff)
     return cbuff->buffor;
 }
 
-// delete buffor
+/**
+ * @brief Delete circular buffor
+ */
 void CB_free(circular_buff *cbuff)
 {
     free(cbuff);
 }
 
-// checks if the buffer is full
+/**
+ * @brief Check if the buffer is full
+ */
 CB_state CB_buff_full(circular_buff *cbuff)
 {
     if (cbuff->new_len == CB_MAX_LEN)
@@ -34,7 +40,9 @@ CB_state CB_buff_full(circular_buff *cbuff)
         return buffor_not_full;
 }
 
-// checks if the buffer is empty
+/**
+ * @brief Check if the buffer is empty
+ */
 CB_state CB_buff_empty(circular_buff *cbuff)
 {
     if (cbuff->new_len == 0)
@@ -44,7 +52,9 @@ CB_state CB_buff_empty(circular_buff *cbuff)
         return buffor_not_empty;
 }
 
-//return -1 if read data not success
+/**
+ * @brief Read data rom buffor, return -1 if not success
+ */
 uint8_t CB_read_data(circular_buff *cbuff)
 {
     uint8_t r;
@@ -77,7 +87,9 @@ uint8_t CB_read_data(circular_buff *cbuff)
         return -1;
 }
 
-//return 1 if add data success
+/**
+ * @brief Add data to buffor, return 1 if success
+ */
 uint8_t CB_add_data(circular_buff *cbuff, uint8_t data)
 {
     // checks if buffer is not full

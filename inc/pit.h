@@ -9,8 +9,8 @@
 
 #define BUS_CLOCK SystemCoreClock / 2
 
-extern uint8_t irqPIT;
-extern uint8_t irqPIT2;
+extern uint8_t pit_irq;
+extern uint8_t pit2_irq;
 
 void PIT_init(void);
 

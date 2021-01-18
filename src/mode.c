@@ -15,7 +15,7 @@
 #include "../inc/led.h"
 
 uint8_t mode = 0;
-uint8_t RTC_mode = 0;
+uint8_t mode_rtc = 0;
 uint8_t prev_mode = 0;
 
 float temperature_result = 0;
@@ -36,7 +36,7 @@ void chooseMode()
   if (prev_mode != mode)
   {
     LCD1602_ClearRow(0);
-    CalculatorReset();
+    Calculator_reset();
     LEDs_off();
     ledModeOn();
     prev_mode = mode;
@@ -69,7 +69,7 @@ void uartMode()
           temperatureMode();
           mode = 1;
           snprintf(tx_str, TX_STR_SIZE, "Temperature=%0.1f%cC \r\n", temperature_result, 0xBA);
-          uart_send((uint8_t *)tx_str);
+          UART0_send((uint8_t *)tx_str);
           memset(rx_str, 0, RX_STR_SIZE * sizeof(uint8_t));
           i = 0;
         }
@@ -91,12 +91,13 @@ void uartMode()
 
 void calculatorMode()
 {
-  if (irqPIT)
+  if (pit_irq)
   {
-    CalculatorLoop();
-    irqPIT = 0;
+    Calculator_loop();
+    pit_irq = 0;
   }
 }
+
 void temperatureMode()
 {
   char buff[20] = "\0";
@@ -104,18 +105,18 @@ void temperatureMode()
   float Ut25 = 0.716;
   float m = 0.00162;
 
-  if (irqPIT2)
+  if (pit2_irq)
   {
-    temperature_result = 25.0 - (((DMAvalue[0] & 0xFFFF) * adc_volt_coeff) - Ut25) / m;
+    temperature_result = 25.0 - (((DMA_value[0] & 0xFFFF) * adc_volt_coeff) - Ut25) / m;
     snprintf(buff, 20, "T=%0.1f%cC   ", temperature_result, 0xDF);
     LCD1602_PrintXY(buff, 0, 0);
-    irqPIT2 = 0;
+    pit2_irq = 0;
   }
 }
 
 void chooseModeRTC()
 {
-  switch (RTC_mode)
+  switch (mode_rtc)
   {
   case 0:
     defaultRTCMode();
@@ -149,31 +150,31 @@ void chooseModeRTC()
     RTC_save();
     RTC->SR |= RTC_SR_TCE_MASK; //enable RTC
     LCD1602_Blink_Off();
-    alarm_uart_send();
-    RTC_mode = 0;
+    RTC_alarm_uart_send();
+    mode_rtc = 0;
     break;
   }
 }
 
 void alarmModeRTC()
 {
-  static uint8_t alarm_prev = 0;
+  static uint8_t rtc_alarm_prev = 0;
 
-  if (alarmRTC == 1)
+  if (rtc_alarm_irq == 1)
   {
     buzzer_on();
-    uart_send("ALARM\r\n");
-    alarm_prev = 1;
-    alarmRTC = 2;
+    UART0_send("ALARM\r\n");
+    rtc_alarm_prev = 1;
+    rtc_alarm_irq = 2;
   }
 
-  else if (alarmRTC == 0 && alarm_prev)
+  else if (rtc_alarm_irq == 0 && rtc_alarm_prev)
   {
     buzzer_off();
-    uart_send("Alarm has been cleared ");
-    rtc_uart_send();
-    alarm_prev = 0;
-    alarmRTC = 2;
+    UART0_send("Alarm has been cleared ");
+    RTC_time_uart_send();
+    rtc_alarm_prev = 0;
+    rtc_alarm_irq = 2;
   }
 }
 
@@ -189,77 +190,77 @@ void ledModeOn()
 
 void defaultRTCMode()
 {
-  if (irqRTC)
+  if (rtc_irq)
   {
-    display_time();
-    but3 = 0;
-    irqRTC = 0;
+    RTC_display_time();
+    but3_irq = 0;
+    rtc_irq = 0;
   }
 }
 
 void setHours()
 {
-  if (but3)
+  if (but3_irq)
   {
     RTC->SR &= ~RTC_SR_TCE_MASK; //disable RTC
     rtc_seconds_counter += 3600;
-    display_time();
+    RTC_display_time();
     LCD1602_SetCursor(7, 1);
-    but3 = 0;
+    but3_irq = 0;
   }
 }
 
 void setMinutes()
 {
-  if (but3)
+  if (but3_irq)
   {
     rtc_seconds_counter += 60;
-    display_time();
+    RTC_display_time();
     LCD1602_SetCursor(10, 1);
-    but3 = 0;
+    but3_irq = 0;
   }
 }
 
 void setSeconds()
 {
-  if (but3)
+  if (but3_irq)
   {
     rtc_seconds_counter++;
-    display_time();
+    RTC_display_time();
     LCD1602_SetCursor(13, 1);
-    but3 = 0;
+    but3_irq = 0;
   }
 }
 
 void setHoursAlarm()
 {
-  if (but3)
+  if (but3_irq)
   {
     rtc_seconds_alarm_counter += 3600;
-    display_alarm_time();
+    RTC_display_alarm();
     LCD1602_SetCursor(7, 1);
-    but3 = 0;
+    but3_irq = 0;
   }
 }
 
 void setMinutesAlarm()
 {
-  if (but3)
+  if (but3_irq)
   {
     rtc_seconds_alarm_counter += 60;
-    display_alarm_time();
+    RTC_display_alarm();
     LCD1602_SetCursor(10, 1);
-    but3 = 0;
+    but3_irq = 0;
   }
 }
 
 void setSecondsAlarm()
 {
-  if (but3)
+  if (but3_irq)
   {
     rtc_seconds_alarm_counter++;
-    display_alarm_time();
+    RTC_display_alarm();
     LCD1602_SetCursor(13, 1);
-    but3 = 0;
+    but3_irq = 0;
   }
 }

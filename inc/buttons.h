@@ -11,7 +11,7 @@
 #define BUT2 7
 #define BUT3 6
 
-extern uint8_t but3;
+extern uint8_t but3_irq;
 
 void BUTTOONS_init();
 

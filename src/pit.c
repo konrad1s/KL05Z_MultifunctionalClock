@@ -7,24 +7,24 @@
 #include "MKL05Z4.h"
 #include "../inc/pit.h"
 
-uint8_t irqPIT = 0;
-uint8_t irqPIT2 = 0;
+uint8_t pit_irq = 0;
+uint8_t pit2_irq = 0;
 
 void PIT_IRQHandler()
 {
 	if (PIT->CHANNEL[0].TFLG & PIT_TFLG_TIF_MASK)
 	{
-		if (irqPIT == 0)
-			irqPIT = 1;
+		if (!pit_irq)
+			pit_irq = 1;
 
 		PIT->CHANNEL[0].TFLG &= PIT_TFLG_TIF_MASK; // clear the timer interrupt flag
 	}
 
 	if (PIT->CHANNEL[1].TFLG & PIT_TFLG_TIF_MASK)
 	{
-		if (!irqPIT2)
+		if (!pit2_irq)
 		{
-			irqPIT2 = 1;
+			pit2_irq = 1;
 			ADC0->SC1[0] = ADC_SC1_ADCH(26) | (ADC0->SC1[0] & (ADC_SC1_AIEN_MASK));
 		}
 

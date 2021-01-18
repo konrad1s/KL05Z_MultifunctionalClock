@@ -14,7 +14,7 @@
 #define DEFAULT_SYSTEM_CLOCK 41943040u
 
 void UART0_init(void);
-void uart_send(uint8_t *text);
+void UART0_send(uint8_t *text);
 
 extern circular_buff tx_buffor, rx_buffor;
 

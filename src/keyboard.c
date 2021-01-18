@@ -16,9 +16,6 @@ char KB_map[4][4] = {
 char KB_rows[4] = {KB_ROW1, KB_ROW2, KB_ROW3, KB_ROW4};
 char KB_columnes[4] = {KB_COLUMNE1, KB_COLUMNE2, KB_COLUMNE3, KB_COLUMNE4};
 
-///////////////////////////////////////////////////////////
-// Initialize keyboard
-///////////////////////////////////////////////////////////
 void KB_init(void)
 {
     if (KB_PORT == PORTA)
@@ -60,10 +57,9 @@ void KB_init(void)
     KB_PORT->PCR[KB_COLUMNE1] |= PORT_PCR_PE_MASK | PORT_PCR_PS_MASK;
 }
 
-///////////////////////////////////////////////////////////
-// Function read pressed button
-// returns char from KB_map[][], if button is not pressed return 0
-///////////////////////////////////////////////////////////
+/**
+ * @brief Read pressed button, if not pressed return 0
+ */
 char KB_read(void)
 {
     char result = 0x00;

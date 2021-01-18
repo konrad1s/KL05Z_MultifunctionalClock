@@ -13,9 +13,9 @@ typedef enum
   true
 } bool;
 
-char ReadButton(void);
-void Calc(char *str, char *separator, bool sign_equal);
-void CalculatorLoop(void);
-void CalculatorReset(void);
+char Calculator_ReadButton(void);
+void Calculate(char *str, char *separator, bool sign_equal);
+void Calculator_loop(void);
+void Calculator_reset(void);
 
 #endif
