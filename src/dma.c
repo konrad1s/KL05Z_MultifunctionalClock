@@ -6,7 +6,7 @@
 
 #include "../inc/dma.h"
 
-uint32_t DMA_value[5];
+uint32_t DMA_value[3];
 
 void DMA_init()
 {

@@ -17,7 +17,7 @@
 ; </h>
 
 ;Stack_Size      EQU     0x00000100
-Stack_Size EQU 0x00000300
+Stack_Size 		 EQU 	 0x00000300
 
                 AREA    STACK, NOINIT, READWRITE, ALIGN=3
 Stack_Mem       SPACE   Stack_Size

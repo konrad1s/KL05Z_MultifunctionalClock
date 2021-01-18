@@ -20,11 +20,11 @@
 #include <string.h>
 #include <stdlib.h>
 
-void Init_all();
+void init_all();
 
 int main(void)
 {
-  Init_all();
+  init_all();
   LCD1602_PrintXY("Time:\0", 0, 1);
 
   while (1)
@@ -37,12 +37,12 @@ int main(void)
   }
 }
 
-void Init_all()
+void init_all()
 {
   LCD1602_Init(); // initialize LCD
   LCD1602_Backlight(TRUE);
   KB_init();       // initialize Keyboard
-  LEDs_init();     // // initialize LEDs
+  LEDs_init();     // initialize LEDs
   PIT_init();      // initialize PIT
   RTC_init();      // initialize RTC
   BUTTOONS_init(); // initialize buttons
