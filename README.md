@@ -10,7 +10,7 @@ The calculator operates on floating point numbers, so increment stack size in th
 Stack_Size EQU 0x00000300
 ```
 ## Pictorial diagram
-<img src="photos/scheme_block.png" />
+<img src="photos/scheme_block.png" width="800" height="435">
 
 ## Modes
 The clock has three different main modes. In each mode user can set the current time and alarm time using the hardware real-time clock (RTC). Each of the modes is signaled by the RGB diode located on the board. To change mode press BUT1.
