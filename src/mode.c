@@ -128,7 +128,21 @@ void chooseModeRTC()
     LCD1602_SetCursor(13, 1);
     setSeconds();
     break;
+	  case 4:
+    LCD1602_Blink_On();
+    LCD1602_SetCursor(7, 1);
+    setHoursAlarm();
+    break;
+  case 5:
+    LCD1602_SetCursor(10, 1);
+    setMinutesAlarm();
+    break;
+  case 6:
+    LCD1602_SetCursor(13, 1);
+    setSecondsAlarm();
+    break;
   default:
+		RTC_save();
     RTC->SR |= RTC_SR_TCE_MASK; //enable RTC
     LCD1602_Blink_Off();
     RTC_mode = 0;
@@ -186,6 +200,39 @@ void setSeconds()
   {
     rtc_seconds_counter++;
     display_time();
+    LCD1602_SetCursor(13, 1);
+    but3 = 0;
+  }
+}
+
+void setHoursAlarm()
+{
+  if (but3)
+  {
+    rtc_seconds_alarm_counter += 3600;
+    display_alarm_time();
+    LCD1602_SetCursor(7, 1);
+    but3 = 0;
+  }
+}
+
+void setMinutesAlarm()
+{
+  if (but3)
+  {
+    rtc_seconds_alarm_counter += 60;
+    display_alarm_time();
+    LCD1602_SetCursor(10, 1);
+    but3 = 0;
+  }
+}
+
+void setSecondsAlarm()
+{
+  if (but3)
+  {
+    rtc_seconds_alarm_counter++;
+    display_alarm_time();
     LCD1602_SetCursor(13, 1);
     but3 = 0;
   }

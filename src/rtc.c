@@ -9,6 +9,9 @@ uint8_t irqRTC = 1;
 uint32_t rtc_seconds_counter = 0;
 uint32_t rtc_hours = 0, rtc_minutes = 0, rtc_seconds = 0;
 
+uint32_t rtc_seconds_alarm_counter =0;
+uint32_t rtc_alarm_hours = 0, rtc_alarm_minutes = 0, rtc_alarm_seconds = 0;
+
 void RTC_init(void)
 {
   int i;
@@ -67,6 +70,34 @@ void display_time(void)
   LCD1602_PrintXY(time_print, 6, 1);
 }
 
+display_alarm_time()
+{
+	char time_print[20] = {"00:00:00"};
+  rtc_alarm_seconds = rtc_seconds_alarm_counter % 60;
+  rtc_alarm_minutes = rtc_seconds_alarm_counter / 60;
+  rtc_alarm_hours = rtc_seconds_alarm_counter / 3600;
+  rtc_alarm_minutes %= 60;
+  rtc_alarm_hours %= 24;
+  sprintf(time_print, "%2i:%02i:%02i  \0", rtc_alarm_hours, rtc_alarm_minutes, rtc_alarm_seconds);
+  LCD1602_PrintXY(time_print, 6, 1);
+}
+
+void RTC_save(void)
+{
+	RTC->SR &= ~ RTC_SR_TCE_MASK;
+	
+	//set rtc secounds counter
+	rtc_seconds_counter=rtc_hours*3600 + rtc_minutes * 60 +rtc_seconds;
+	rtc_seconds_alarm_counter=rtc_alarm_hours*3600+rtc_alarm_minutes*60+rtc_alarm_seconds;
+	
+	RTC->TSR =rtc_seconds_counter;					//TSR++ when TSR>=32767
+	
+	RTC->TAR=rtc_seconds_alarm_counter;
+	
+	//enable RTC
+	RTC->SR |= RTC_SR_TCE_MASK;
+}
+
 void RTC_Seconds_IRQHandler(void)
 {
   rtc_seconds_counter++;
@@ -75,5 +106,12 @@ void RTC_Seconds_IRQHandler(void)
 
 void RTC_IRQHandler (void)
 {
-	
+	//if RTC alarm flag is set
+	if(RTC->SR & RTC_SR_TAF_MASK)
+	{
+		
+		uart_send("test");
+		//disable alarm, write new value 
+		RTC->TAR = RTC->TAR;
+	}
 }

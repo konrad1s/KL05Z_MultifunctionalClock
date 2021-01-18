@@ -23,6 +23,9 @@ void defaultRTCMode();
 void setHours();
 void setMinutes();
 void setSeconds();
+void setHoursAlarm();
+void setMinutesAlarm();
+void setSecondsAlarm();
 
 
 #endif
