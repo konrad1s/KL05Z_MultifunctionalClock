@@ -70,3 +70,6 @@ Display text from RX_buffer: send message using bluetooth and display it on LCD.
 
 ## Idle schematic:
 <img src="photos/schematic.png" />
+
+## Android App - Bluetooth Terminal HC-05
+<img src="photos/android.jpg" width="300" height="466">
