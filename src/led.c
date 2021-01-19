@@ -17,7 +17,8 @@ void LEDs_init()
     PORTB->PCR[BUZZER] |= PORT_PCR_MUX(1);
 
     PTB->PDDR |= (1 << RED_LED) | (1 << GREEN_LED) | (1 << BLUE_LED) | (1 << BUZZER); // set as output
-    PTB->PSOR |= (1 << GREEN_LED) | (1 << BLUE_LED) | (1 << BUZZER);                  //turn LEDs off
+    PTB->PSOR |= (1 << GREEN_LED) | (1 << BLUE_LED);                 //turn LEDs off
+		PTB->PCOR |=  (1 << BUZZER); //turn buzzer off
 }
 
 /**
@@ -49,7 +50,7 @@ void LED_toggle(LED_Color color)
  */
 void buzzer_on(void)
 {
-    PTB->PCOR |= (1 << BUZZER);
+   PTB->PSOR |= (1 << BUZZER);
 }
 
 /**
@@ -57,5 +58,5 @@ void buzzer_on(void)
  */
 void buzzer_off(void)
 {
-    PTB->PSOR |= (1 << BUZZER);
+    PTB->PCOR |= (1 << BUZZER);
 }
