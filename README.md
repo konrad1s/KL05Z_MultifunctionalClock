@@ -73,3 +73,8 @@ Display text from RX_buffer: send message using bluetooth and display it on LCD.
 
 ## Android App - Bluetooth Terminal HC-05
 <img src="photos/android.jpg" width="300" height="466">
+
+## Presentation
+**Polish language**</br>
+**Click on image to play**
+[![YOUTUBE LINK](photos/logo.png)](https://www.youtube.com/watch?v=JnZC-3QUlY4)
