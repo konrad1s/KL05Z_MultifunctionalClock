@@ -76,5 +76,5 @@ Display text from RX_buffer: send message using bluetooth and display it on LCD.
 
 ## Presentation
 **Polish language**</br>
-**Click on image to play**
+**Click on image to play**</br>
 [![YOUTUBE LINK](photos/logo.png)](https://www.youtube.com/watch?v=JnZC-3QUlY4)
