@@ -1,6 +1,6 @@
-# FRDM-KL05Z Smart Clock
+# FRDM-KL05Z Multifunctional Clock
 
-The main objective of the project was to create Smart Clock The project is build on FRDM-KL05Z NXP development platform based on Arm Cortex-M0+ Core. Development environment is Keil uVision5, the code is written in C language. Board communicates with smartphone using bluetooth connection, HC-05 module.</br>
+The main objective of the project was to create Multifunctional Clock. The project is build on FRDM-KL05Z NXP development platform based on Arm Cortex-M0+ Core. Development environment is Keil uVision5, the code is written in C language. Board communicates with smartphone using bluetooth connection, HC-05 module.</br>
 The RTC is configured with one second interruption and alarm interruption. The DMA is used as a bus master, it can read ADC measurements and write variable to memory. The usart is implemented using circular buffer. It uses dynamic memory allocation, so there is a need to increase heap size in [startup_MKL05Z4.s](RTE/Device/MKL05Z32xxx4/startup_MKL05Z4.s)
 ```
 Heap_Size EQU 0x00000100
